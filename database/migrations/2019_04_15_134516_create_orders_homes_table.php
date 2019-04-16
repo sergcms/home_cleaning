@@ -17,9 +17,10 @@ class CreateOrdersHomesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
-            $table->enum('pet', ['None', 'Dog', 'Cat', 'Both']);
-            $table->enum('adults_people', ['None', '1 - 2', '3 - 4', '5 and more']);
-            $table->enum('children', ['None', '1', '2', '3 and more']);
+            $table->enum('pet', ['none', 'dog', 'cat', 'both']);
+            $table->enum('count_pets', ['one', 'two', 'more']);
+            $table->enum('adults_people', ['none', 'one_two', 'three_four', 'more']);
+            $table->enum('children', ['none', 'one', 'two', 'more']);
             $table->integer('rate_home_cleanlines');
             $table->boolean('cleaning_before');
             $table->timestamps();

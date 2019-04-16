@@ -1,0 +1,50 @@
+.list li {
+    padding: 12px 0; 
+}
+.block-progress {
+    width: 50px;
+    display: block;
+    height: 20px;
+    border: 1px solid silver;    
+}
+.block-progress + .block-progress {
+    margin-left: 10px;
+} 
+#img-home {
+    display: block;
+    max-height: 100px;
+    max-width: 100px;
+}
+input.home-photos::after {
+    content: 'JPG, JPEG, PNG only, maximum file size - 5 MB';
+    padding-left: 150px;
+    color: silver;
+}
+input[type="checkbox"] {
+    width: 40px;
+    height: 40px;
+}
+.form-check.form-check-inline {
+    margin-right: 0;
+    margin-top: 10px;
+}
+.fas, .far, .fab {
+    border: 1px solid black;
+    border-radius: 100%;
+    padding: 10px;
+    font-size: 35px;
+    position: relative;
+}
+.fas:hover, .far:hover, .fab:hover {
+    background-color: lightskyblue;
+    color: white;
+}
+
+/* .fa-ice-cream::after {
+    content: 'Inside Fridge';
+    display: block;
+    position: absolute;
+    color: silver;
+    font-size: 16px;
+    width: 100%;
+} */

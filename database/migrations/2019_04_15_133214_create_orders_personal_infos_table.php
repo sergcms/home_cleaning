@@ -17,9 +17,9 @@ class CreateOrdersPersonalInfosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
-            $table->enum('cleaning_frequency', ['Once', 'Weekly', 'Biweekly', 'Monthly']);
-            $table->enum('cleaning_type', ['Deep of Spring', 'Move In', 'Move Out', 'Post Remodeling']);
-            $table->enum('cleaning_date', ['Next available', 'This week', 'Next week', 'This Month', 'I am flexible', 'Just need a quote']);
+            $table->enum('cleaning_frequency', ['once', 'weekly', 'biweekly', 'monthly']);
+            $table->enum('cleaning_type', ['deep of spring', 'move in', 'move out', 'post remodeling']);
+            $table->enum('cleaning_date', ['next available', 'this week', 'next week', 'this month', 'i am flexible', 'just need a quote']);
             $table->timestamps();
         });
     }
