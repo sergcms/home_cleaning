@@ -150,6 +150,8 @@
                     <div class="col-md-8">
                         <h6 class="font-weight-bold">How would you rate your current home cleanliness?</h6>
 
+                        <input type="hidden" name="rate_home_cleanlines" value="" id="rate_home_cleanlines">
+
                         <div class="form-group row" id="progress">
                             <span class="block-progress" data-rate="10" id="rate-10"></span>
                             <span class="block-progress" data-rate="20" id="rate-20"></span>

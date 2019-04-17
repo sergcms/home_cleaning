@@ -45,6 +45,6 @@
     </div>
 
     <!-- Script progress bar-->
-    <script src="{{ asset('js/progress.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
 </body>
 </html>

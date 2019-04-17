@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', 'OrderController@welcome')->name('welcome');
+Route::post('/', 'OrderController@welcome')->name('welcome-post');
 
 Route::group(['prefix' => '/order'], function () {
    

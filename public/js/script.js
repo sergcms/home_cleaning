@@ -6,6 +6,8 @@ $('.block-progress').on('click', function(e) {
             $('#rate-' + i).addClass('bg-primary');  
         }
     }
+
+    $('#rate_home_cleanlines').val($(this).data("rate"));
 });
 
 function readURL(input) {

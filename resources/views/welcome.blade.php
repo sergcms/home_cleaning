@@ -6,14 +6,22 @@
         <div class="col-md-6">
             <h3 class="card-title text-center">Get a price home cleaning</h3>
             
-            <form method="POST" action="{{ route('personal-info') }}">
+            @if (count($errors) > 0) 
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                    </ul>    
+                </div>    
+            @endif
+
+            <form method="POST" action="{{ route('welcome-post') }}">
                 @csrf
 
                 <div class="form-row justify-content-center">
-                    {{-- <label for="bedrooms" class="col-md-4 col-form-label text-md-right">{{ __('bedrooms') }}</label> --}}
                     <div class="col-md-6">
                         <select class="custom-select" id="bedrooms" name="bedrooms">
-                            <option selected>Choose bedrooms</option>
                             @for ($i = 1; $i <= config('price.count_bedrooms'); $i++)
                                 <option value="{{ $i }}">{{ $i }} bedroom(s)</option>
                             @endfor
@@ -28,7 +36,6 @@
 
                     <div class="col-md-6">
                         <select class="custom-select" id="bathrooms" name="bathrooms">
-                            <option selected>Choose bathrooms</option>
                             @for ($i = 0.5; $i <= config('price.count_bathrooms'); $i+=0.5)
                                 <option value="{{ $i }}">{{ $i }} bathroom(s)</option>
                             @endfor
@@ -44,7 +51,7 @@
                     <div class="col-md-4">
                         <label for="zip-code" class="col-md-12 col-form-label text-md-left">{{ __('ZIP Code') }}</label>
 
-                        <input id="zip-code" type="number" class="form-control{{ $errors->has('zip-code') ? ' is-invalid' : '' }}" name="zip_code" value="{{ old('zip_code') }}" required autofocus>
+                        <input id="zip-code" type="number" class="form-control{{ $errors->has('zip_code') ? ' is-invalid' : '' }}" name="zip_code" value="{{ old('zip_code') }}" required autofocus>
 
                         @if ($errors->has('zip_code'))
                             <span class="invalid-feedback" role="alert">
