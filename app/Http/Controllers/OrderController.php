@@ -165,8 +165,6 @@ class OrderController extends Controller
 
     public function materials(Request $request) 
     {
-        dump(Session::all());
-
         if ($request->getMethod() === 'POST') {
 
             OrdersMaterialsFloor::create(
@@ -211,21 +209,37 @@ class OrderController extends Controller
 
             $this->sessionPut($request->all(), 'materials');
 
-            return redirect()->route('extra');
+            return redirect()->route('extras');
         }
 
         return view('form.materials');
     }
 
-    public function extra(Request $request) {
+    public function extras(Request $request) {
 
         dump(Session::all());
 
+        // Order::where('id', Session::get('personal_info.id'))
+                // ->update([ 'total_sum' => 200]);
+
         if ($request->getMethod() === 'POST') {
 
-            
+            OrderExtra::updateOrCreate(
+                [ 'order_id', Session::get('personal_info.id') ],
+                [
+                    'inside_fridge'    => $request->inside_fridge,
+                    'inside_oven'      => $request->inside_oven,
+                    'garage_swept'     => $request->garage_swept,
+                    'inside_cabinets'  => $request->inside_cabinets,
+                    'laundry_wash_dry' => $request->laundry_wash_dry,
+                    'bed_sheet_change' => $request->bed_sheet_change,
+                    'blinds_cleaning'  => $request->blinds_cleaning,
+                    'on_weekend'       => $request->on_weekend == 'yes' ? 1 : 0,
+                    'carpet_cleaned'   => $request->carpet_cleaned == 'yes' ? 1 : 0,
+                ]
+            );
 
-            $this->sessionPut($request->all(), 'extra');
+            $this->sessionPut($request->all(), 'extras');
 
             // return redirect()->route('paymant');
         }

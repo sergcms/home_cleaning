@@ -27,6 +27,7 @@ class CreateOrdersTable extends Migration
             $table->integer('square_footage')->nullable();
             $table->enum('payment', ['paid', 'failed', 'no paid'])->default('no paid');
             $table->float('total_sum')->nullable();
+            $table->date('date_payment')->nullable();
             $table->timestamps();
         });
     }

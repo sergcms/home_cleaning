@@ -45,6 +45,10 @@ input[type="checkbox"] {
     background-color: lightskyblue;
     color: white;
 }
+.fas.active, .far.active, .fab.active {
+    background-color: #1c87ca;
+    color: white;
+}
 
 /* .fa-ice-cream::after {
     content: 'Inside Fridge';

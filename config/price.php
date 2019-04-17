@@ -151,5 +151,19 @@ return [
         'no'  =>  0,
     ],
 
+    'inside_fridge' => 25,
 
+    'inside_oven'   => 25,
+
+    'garage_swept'  => 25,
+
+    'inside_cabinets' => 25,
+
+    'laundry_wash_dry' => 25,
+
+    'bed_sheet_change' => 25,
+
+    'blinds_cleaning' => 25,
+
+    'carpet_cleaned' => 25,
 ];

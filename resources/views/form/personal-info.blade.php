@@ -140,7 +140,7 @@
                             </div>
 
                             <div class="form-check ml-3">
-                                <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="just need quote">
+                                <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="just need a quote">
                                 <label class="form-check-label" for="cleaning-date">
                                     Just need a quote
                                 </label>
