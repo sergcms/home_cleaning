@@ -208,6 +208,12 @@
                             <img id="img-home" class="" src="{{ Session::get('photos', 'http://placehold.it/100') }}" alt="your image" />
                         </div>
                     </div>
+
+                    @if ($errors->has('photos[]'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('photos[]') }}</strong>
+                        </span>
+                    @endif
                 </div>
                 <hr>
 

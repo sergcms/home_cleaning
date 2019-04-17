@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\User;
-use Illuminate\Http\Request;
+use App\Order;
 use Validator;
+use App\OrdersPhoto;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -29,11 +32,17 @@ class OrderController extends Controller
         'phone'          => ['required'],
     ];
 
-    public function validator(Request $request, $rules)
+    private $photo = [
+        'photo' => ['mimes:jpeg,jpg,png', 'size:5000']
+    ];
+
+    // Validate data
+    public function validator($data, $rules)
     {
-        return Validator::make($request->all(), $rules)->validate();
+        return Validator::make($data, $rules)->validate();
     }
     
+    // Put in session array data
     public function sessionPut($data, $name)
     {
         foreach ($data as $key => $value) {
@@ -43,12 +52,11 @@ class OrderController extends Controller
         }
     }
 
-    // 
     public function welcome(Request $request)
     {
         if ($request->getMethod() === 'POST') {
 
-            $this->validator($request, $this->welcome_rules);
+            $this->validator($request->all(), $this->welcome_rules);
 
             $this->sessionPut($request->all(), 'welcome');
 
@@ -64,7 +72,7 @@ class OrderController extends Controller
     {
         if ($request->getMethod() === 'POST') {
 
-            $this->validator($request, $this->personal_info_rules);
+            $this->validator($request->all(), $this->personal_info_rules);
 
             $this->sessionPut($request->all(), 'personal_info');
 
@@ -83,6 +91,24 @@ class OrderController extends Controller
                     'zip_code'       => Session::get('welcome.zip_code'),
                 ]
             );
+            
+            $user = User::where('email', Session::get('welcome.email'))->first();
+
+            if ($user) {
+                Order::create(
+                    [
+                        'user_id'   => $user->id, 
+                        'bedrooms'  => Session::get('welcome.bedrooms'),
+                        'bathrooms' => Session::get('welcome.bathrooms'),
+                        'zip_code'  => Session::get('welcome.zip_code'),
+                        'address'        => $request->address,
+                        'apt'            => $request->apt,
+                        'city'           => $request->city,
+                        'square_footage' => $request->square_footage,
+                        'phone'          => $request->phone,
+                    ]
+                );
+            }
 
             return redirect()->route('your-home');
         }
@@ -93,10 +119,12 @@ class OrderController extends Controller
     public function home(Request $request)
     {
         if ($request->getMethod() === 'POST') {
+            dump(Session::all());
+            
+            // save photos home 
+            $this->savePhotosHome($request->file('photos'));
 
-            // foreach ($request->file('photos') as $value) {
-            //     dump($value->getClientOriginalName());
-            // }
+
             dd(Session::all());
 
             return redirect()->route('materials');
@@ -121,6 +149,28 @@ class OrderController extends Controller
         }
 
         return view('form.extras', []);
+    }
+
+
+    public function savePhotosHome($photos)
+    {
+        if (count($photos) > 8) {
+            return $message = 'Count photos not be most 8';
+        }
+        
+        foreach ($photos as $photo) {
+
+            // $this->validator($photo);
+
+            Storage::putFileAs('/public/images', $photo, $photo->getClientOriginalName());        
+
+            OrdersPhoto::create([
+                // 'order' => 
+                'url'   => '/images/' . $photo->getClientOriginalName() 
+            ]);
+
+            
+        }
     }
 
 }
