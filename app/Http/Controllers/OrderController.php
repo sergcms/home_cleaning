@@ -6,8 +6,13 @@ use Session;
 use App\User;
 use App\Order;
 use Validator;
+use App\OrdersHome;
 use App\OrdersPhoto;
+use App\OrdersMaterial;
+use App\OrdersPersonalInfo;
 use Illuminate\Http\Request;
+use App\OrdersMaterialsFloor;
+use App\OrdersMaterialsCountertop;
 use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
@@ -32,8 +37,10 @@ class OrderController extends Controller
         'phone'          => ['required'],
     ];
 
-    private $photo = [
-        'photo' => ['mimes:jpeg,jpg,png', 'size:5000']
+    private $your_home_rules = 
+    [
+        'rate_home_cleanlines' => ['required', 'in:10,20,30,40,50,60,70,80,90,100'],
+        'photos.*'             => ['mimes:jpeg,jpg,png', 'between:30,5000'],
     ];
 
     // Validate data
@@ -46,7 +53,7 @@ class OrderController extends Controller
     public function sessionPut($data, $name)
     {
         foreach ($data as $key => $value) {
-            if ($key !== "_token") {
+            if ($key !== "_token" && $key !== "photos") {
                 Session::put($name.'.'.$key, $value);
             }
         }
@@ -74,8 +81,6 @@ class OrderController extends Controller
 
             $this->validator($request->all(), $this->personal_info_rules);
 
-            $this->sessionPut($request->all(), 'personal_info');
-
             User::updateOrCreate(
                 ['email' => Session::get('welcome.email')],
                 [
@@ -95,12 +100,12 @@ class OrderController extends Controller
             $user = User::where('email', Session::get('welcome.email'))->first();
 
             if ($user) {
-                Order::create(
+                $order = Order::create(
                     [
-                        'user_id'   => $user->id, 
-                        'bedrooms'  => Session::get('welcome.bedrooms'),
-                        'bathrooms' => Session::get('welcome.bathrooms'),
-                        'zip_code'  => Session::get('welcome.zip_code'),
+                        'user_id'        => $user->id, 
+                        'bedrooms'       => Session::get('welcome.bedrooms'),
+                        'bathrooms'      => Session::get('welcome.bathrooms'),
+                        'zip_code'       => Session::get('welcome.zip_code'),
                         'address'        => $request->address,
                         'apt'            => $request->apt,
                         'city'           => $request->city,
@@ -109,6 +114,19 @@ class OrderController extends Controller
                     ]
                 );
             }
+
+            OrdersPersonalInfo::create(
+                [
+                    'order_id'           => $order->id,
+                    'cleaning_frequency' => $request->cleaning_frequency,
+                    'cleaning_type'      => $request->cleaning_type,
+                    'cleaning_date'      => $request->cleaning_date, 
+                ]
+            );
+
+            $this->sessionPut($request->all(), 'personal_info');
+            
+            Session::put('personal_info.id', $order->id);
 
             return redirect()->route('your-home');
         }
@@ -119,13 +137,25 @@ class OrderController extends Controller
     public function home(Request $request)
     {
         if ($request->getMethod() === 'POST') {
-            dump(Session::all());
-            
+
+            $this->validator($request->all(), $this->your_home_rules);
+
             // save photos home 
             $this->savePhotosHome($request->file('photos'));
 
+            OrdersHome::create(
+                [
+                    'order_id'             => Session::get('personal_info.id'),
+                    'pet'                  => $request->pet,
+                    'count_pets'           => $request->pet == 'none' ? 'none' : $request->count_pets,
+                    'adults_people'        => $request->adults_people,
+                    'children'             => $request->children,
+                    'rate_home_cleanlines' => $request->rate_home_cleanlines,
+                    'cleaning_before'      => $request->cleaning_before == 'yes' ? 1 : 0,
+                ]
+            );
 
-            dd(Session::all());
+            $this->sessionPut($request->all(), 'your_home');
 
             return redirect()->route('materials');
         }
@@ -133,44 +163,91 @@ class OrderController extends Controller
         return view('form.your-home');
     }
 
-    public function materials(Request $request) {
+    public function materials(Request $request) 
+    {
+        dump(Session::all());
 
         if ($request->getMethod() === 'POST') {
-            dd($request);
+
+            OrdersMaterialsFloor::create(
+                [
+                    'order_id'      => Session::get('personal_info.id'),
+                    'hardwood'      => $request->has('hardwood'),
+                    'cork'          => $request->has('cork'),
+                    'vinyl'         => $request->has('vinyl'),
+                    'concrete'      => $request->has('concrete'),
+                    'carpet'        => $request->has('carpet'),
+                    'natural_stone' => $request->has('natural_stone'),
+                    'tile'          => $request->has('tile'),
+                    'laminate'      => $request->has('laminate'),
+                ]
+            );
+
+            OrdersMaterialsCountertop::create(
+                [
+                    'order_id'      => Session::get('personal_info.id'),
+                    'concrete'      => $request->has('concrete'),
+                    'quartz'        => $request->has('quartz'),
+                    'formica'       => $request->has('formica'),
+                    'granite'       => $request->has('granite'),
+                    'marble'        => $request->has('marble'),
+                    'tile'          => $request->has('tile'),
+                    'paper_stone'   => $request->has('paper_stone'),
+                    'butcher_block' => $request->has('butcher_block'),
+                ]
+            );
+            
+            OrdersMaterial::create(
+                [
+                    'order_id'                    => Session::get('personal_info.id'),
+                    'stainless_steel_application' => $request->stainless_steel_application == "yes" ? 1 : 0,
+                    'type_stove'                  => $request->type_stove == "yes" ? 1 : 0,
+                    'shower_doors_glass'          => $request->shower_doors_glass == "yes" ? 1 : 0,
+                    'mold'                        => $request->mold == "yes" ? 1 : 0,
+                    'areas_needing_attention'     => htmlspecialchars($request->areas_needing_attention),
+                    'additional_info'             => htmlspecialchars($request->additional_info),
+                ]
+            );
+
+            $this->sessionPut($request->all(), 'materials');
+
+            return redirect()->route('extra');
         }
 
-        return view('form.materials', []);
+        return view('form.materials');
     }
 
     public function extra(Request $request) {
 
+        dump(Session::all());
+
         if ($request->getMethod() === 'POST') {
-            dd($request);
+
+            
+
+            $this->sessionPut($request->all(), 'extra');
+
+            // return redirect()->route('paymant');
         }
 
-        return view('form.extras', []);
+        return view('form.extras');
     }
 
 
     public function savePhotosHome($photos)
     {
-        if (count($photos) > 8) {
-            return $message = 'Count photos not be most 8';
-        }
-        
+        // if (count($photos) > 8) {
+        //     return $message = 'Count photos not be most 8';
+        // }
+
         foreach ($photos as $photo) {
 
-            // $this->validator($photo);
-
-            Storage::putFileAs('/public/images', $photo, $photo->getClientOriginalName());        
+            Storage::putFileAs('/public/images', $photo, $photo->hashName());        
 
             OrdersPhoto::create([
-                // 'order' => 
-                'url'   => '/images/' . $photo->getClientOriginalName() 
+                'order_id' => Session::get('personal_info.id'),
+                'url'      => '/images/' . $photo->hashName() 
             ]);
-
-            
         }
     }
-
 }

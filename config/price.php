@@ -48,6 +48,7 @@ return [
 
     'count_pets' =>
     [
+        'none' =>  0,
         'one'  => 10,
         'two'  => 20, 
         'more' => 30,

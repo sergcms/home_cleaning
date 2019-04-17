@@ -1,5 +1,7 @@
 @extends('layouts.layout')
 
+@include('header')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -7,6 +9,16 @@
             <h3 class="card-title text-center">Now we need information about your home</h3>
             <p class="text-center">This information will be used to prepare for a cleaning</p>
             <hr>
+
+            @if (count($errors) > 0) 
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                    </ul>    
+                </div>    
+            @endif
 
             <form method="POST" action="{{ route('your-home') }}" enctype="multipart/form-data">
                 @csrf
@@ -150,7 +162,7 @@
                     <div class="col-md-8">
                         <h6 class="font-weight-bold">How would you rate your current home cleanliness?</h6>
 
-                        <input type="hidden" name="rate_home_cleanlines" value="" id="rate_home_cleanlines">
+                        <input type="hidden" name="rate_home_cleanlines" value="10" id="rate_home_cleanlines">
 
                         <div class="form-group row" id="progress">
                             <span class="block-progress" data-rate="10" id="rate-10"></span>

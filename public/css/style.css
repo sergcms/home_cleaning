@@ -1,3 +1,9 @@
+.btn.btn-light.passed {
+    background-color: #38c172!important;
+}
+.btn.btn-light.active {
+    background-color: #109147!important;
+}
 .list li {
     padding: 12px 0; 
 }
