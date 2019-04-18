@@ -1,3 +1,4 @@
+// progress bar on view home
 $('.block-progress').on('click', function(e) {
     $('.block-progress').removeClass('bg-primary');
 
@@ -10,6 +11,7 @@ $('.block-progress').on('click', function(e) {
     $('#rate_home_cleanlines').val($(this).data("rate"));
 });
 
+// display preview image on view home 
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -22,29 +24,33 @@ function readURL(input) {
     }
 }
 
+// diaplay extra services on view extras
 $('#extras').on('click', function(e) {
 
     $(e.target).toggleClass('active');
 
     let price = $(e.target).data('price');
     let name = $(e.target).data('name');
+    let item_id = $(e.target).data('id');
 
-    console.log($('.list-group-item').data('name'));
-    
-    if ($('#list-services .list-group-item').data('name') == name) {
-        console.log($(e.target).data('name'));
-        // $(e.target).data('name').remove();
+    if (item_id == $('#'+item_id).attr('id')) {
+        
+        axios.get('/extras').then((response) => {
+            console.log(response);
+        }).catch((error) => { console.log(error); });
+
+        $('#'+item_id).remove();
     } else {
-        $('#list-services').append( "<li class='list-group-item' data-name='" + name + "'>" + name + " - $" + price + "</li>" );
+
+        axios.get('/extras').then((response) => {
+            console.log(response);
+        }).catch((error) => { console.log(error); });
+
+        $('#list-services').append( "<li class='list-group-item' id='" + item_id + "'>" + name + " - $" + price + "</li>" );
     }
 
-    // console.log(e.target.className);
-        // if ($('.block-progress').data('rate') <= $(this).data("rate")) {
-        //     $('#rate-' + i).addClass('bg-primary');  
-        // }
-
-    // $('#rate_home_cleanlines').val($(this).data("rate"));
 });
+
 
 // $('#').on('change', function() {
 

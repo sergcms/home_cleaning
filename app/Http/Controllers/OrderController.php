@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Session;
 use App\User;
 use App\Order;
 use Validator;
 use App\OrdersHome;
 use App\OrdersPhoto;
+use App\CalculationSum;
 use App\OrdersMaterial;
 use App\OrdersPersonalInfo;
 use Illuminate\Http\Request;
@@ -58,31 +60,46 @@ class OrderController extends Controller
             }
         }
     }
-
+    
     public function welcome(Request $request)
     {
+        if (Session::get('info.order_id')) {
+            $email  = $info_order->user->email;
+            $zip_code  = $info_order->zip_code;
+            $bedrooms  = $info_order->bedrooms;
+            $bathrooms = $info_order->bathrooms;
+
+            $info = compact('email', 'zip_code', 'bedrooms', 'bathrooms', 'email');
+        } else {
+            $info = Session::get('info');
+        }
+        
         if ($request->getMethod() === 'POST') {
 
             $this->validator($request->all(), $this->welcome_rules);
 
-            $this->sessionPut($request->all(), 'welcome');
+            $this->sessionPut($request->all(), 'info');
 
             $user = User::where('email', $request->email)->first();
 
-            return redirect()->route('personal-info')->with(['user' => $user]);
+            return redirect()->route('personal-info');
         }
 
-        return view('welcome');
+        return view('welcome', ['info' => (object)$info]);
     }
 
     public function personalInfo(Request $request)
     {
+        $order_personal_info = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
+       
+        $order = $order_personal_info->order;
+        
         if ($request->getMethod() === 'POST') {
 
             $this->validator($request->all(), $this->personal_info_rules);
 
             User::updateOrCreate(
-                ['email' => Session::get('welcome.email')],
+                ['email' => Session::get('info.email')],
                 [
                     'first_name'     => $request->first_name,
                     'last_name'      => $request->last_name,
@@ -92,20 +109,23 @@ class OrderController extends Controller
                     'square_footage' => $request->square_footage,
                     'phone'          => $request->phone,
                     'hear_about_us'  => $request->hear_about_us,
-                    'email'          => Session::get('welcome.email'),
-                    'zip_code'       => Session::get('welcome.zip_code'),
+                    'email'          => Session::get('info.email'),
+                    'zip_code'       => Session::get('info.zip_code'),
                 ]
             );
             
-            $user = User::where('email', Session::get('welcome.email'))->first();
+            $user = User::where('email', Session::get('info.email'))->first();
 
             if ($user) {
-                $order = Order::create(
+                $order = Order::updateOrCreate(
+                    [ 'id' => Session::get('info.order_id') ],
                     [
                         'user_id'        => $user->id, 
-                        'bedrooms'       => Session::get('welcome.bedrooms'),
-                        'bathrooms'      => Session::get('welcome.bathrooms'),
-                        'zip_code'       => Session::get('welcome.zip_code'),
+                        'bedrooms'       => Session::get('info.bedrooms'),
+                        'bathrooms'      => Session::get('info.bathrooms'),
+                        'zip_code'       => Session::get('info.zip_code'),
+                        'first_name'     => $request->first_name,
+                        'last_name'      => $request->last_name,
                         'address'        => $request->address,
                         'apt'            => $request->apt,
                         'city'           => $request->city,
@@ -115,7 +135,8 @@ class OrderController extends Controller
                 );
             }
 
-            OrdersPersonalInfo::create(
+            OrdersPersonalInfo::updateOrCreate(
+                [ 'id' => Session::get('info.order_id') ],
                 [
                     'order_id'           => $order->id,
                     'cleaning_frequency' => $request->cleaning_frequency,
@@ -124,18 +145,21 @@ class OrderController extends Controller
                 ]
             );
 
-            $this->sessionPut($request->all(), 'personal_info');
-            
-            Session::put('personal_info.id', $order->id);
+            Session::put('info.user_id', $user->id);
+            Session::put('info.order_id', $order->id);
 
             return redirect()->route('your-home');
         }
         
-        return view('form.personal-info');
+        return view('form.personal-info', ['order' => $order, 'order_personal_info' => $order_personal_info]);
     }
 
     public function home(Request $request)
     {
+        $order_home = OrdersHome::where('order_id', Session::get('info.order_id'))->first();
+        
+        
+        
         if ($request->getMethod() === 'POST') {
 
             $this->validator($request->all(), $this->your_home_rules);
@@ -145,7 +169,7 @@ class OrderController extends Controller
 
             OrdersHome::create(
                 [
-                    'order_id'             => Session::get('personal_info.id'),
+                    'order_id'             => Session::get('info.order_id'),
                     'pet'                  => $request->pet,
                     'count_pets'           => $request->pet == 'none' ? 'none' : $request->count_pets,
                     'adults_people'        => $request->adults_people,
@@ -155,12 +179,10 @@ class OrderController extends Controller
                 ]
             );
 
-            $this->sessionPut($request->all(), 'your_home');
-
             return redirect()->route('materials');
         }
         
-        return view('form.your-home');
+        return view('form.your-home', ['order_home' => $order_home]);
     }
 
     public function materials(Request $request) 
@@ -219,6 +241,10 @@ class OrderController extends Controller
 
         dump(Session::all());
 
+        $order = new CalculationSum();
+
+        // $total_sum = $order->totalSum();
+
         // Order::where('id', Session::get('personal_info.id'))
                 // ->update([ 'total_sum' => 200]);
 
@@ -246,7 +272,6 @@ class OrderController extends Controller
 
         return view('form.extras');
     }
-
 
     public function savePhotosHome($photos)
     {

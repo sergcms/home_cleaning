@@ -7,21 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'bedrooms',
-        'bathrooms',
-        'address',
-        'phone',
-        'city',
-        'apt',
-        'zip_code',
-        'square_footage',
-        'payment', 
-    ];
+    protected $fillable = [ ];
+
+    protected $guarded = ['id'];
 
     public function user()
     {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User');
     }
 }

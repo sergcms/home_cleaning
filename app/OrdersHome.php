@@ -6,15 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrdersHome extends Model
 {
-    protected $fillable = [
-        'order_id',
-        'pet',
-        'count_pets',
-        'adults_people',
-        'children',
-        'rate_home_cleanlines',
-        'cleaning_before',
-    ];
+    protected $fillable = [ ];
+
+    protected $guarded = ['id'];
 
     public function order()
     {

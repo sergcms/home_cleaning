@@ -10,20 +10,38 @@ return [
     // max count bathrooms on form view welcome
     'count_bathrooms' => 3,
 
+    'bedrooms' => [
+        1 => 100,
+        2 => 120,
+        3 => 130,
+        4 => 150,
+        5 => 180,
+        6 => 200,
+    ],
+
+    'bathrooms' => [
+        0.5 => 50,
+        1   => 70,
+        1.5 => 80,
+        2   => 100,
+        2.5 => 130,
+        3   => 150,
+    ],
+
     'cleaning_frequency' => 
     [
-        'once'     => 100,
-        'weekly'   => 138, 
-        'biweekly' => 174, 
-        'monthly'  => 194,
+        'once'     => 1,
+        'weekly'   => 0.85, 
+        'biweekly' => 0.9, 
+        'monthly'  => 0.95,
     ],
 
     'cleaning_type' =>
     [
-        'deep of spring'  => 11, 
-        'move in'         => 20, 
-        'move out'        => 30, 
-        'post remodeling' => 100,
+        'deep of spring'  => 1.1, 
+        'move in'         => 1.15, 
+        'move out'        => 1.2, 
+        'post remodeling' => 1.25,
     ],
 
     'cleaning_date' =>
@@ -36,82 +54,77 @@ return [
         'just need quote' => 50,
     ],
 
-    'square_footage' => 1.5,
+    'square_footage' => 1.05,
 
     'pet' =>
     [
-        'none' =>  0,
-        'dog'  => 10,
-        'cat'  => 10, 
-        'both' => 20,
+        'none' => 0,
+        'dog'  => 2,
+        'cat'  => 3, 
+        'both' => 5,
     ],
 
     'count_pets' =>
     [
-        'none' =>  0,
-        'one'  => 10,
-        'two'  => 20, 
-        'more' => 30,
+        'one'  =>  1.05,
+        'two'  =>  1.1, 
+        'more' =>  1.2,
     ],
 
     'adults_people' => 
     [
-        'none'        =>  0,
-        'one_two'     => 10, 
-        'three_four'  => 20,
-        'more'        => 30,
+        'none'       =>  0,
+        'one_two'    =>  3, 
+        'three_four' =>  5,
+        'more'       => 10,
     ],
 
     'children' => 
     [
         'none' =>  0,
-        'one'  => 20, 
-        'two'  => 30, 
-        'more' => 40,
+        'one'  =>  3, 
+        'two'  =>  6, 
+        'more' => 10,
     ],
 
     'rate_home_cleanlines' => 
     [
-        10  => 50,
-        20  => 45,
-        30  => 40,
-        40  => 35,
-        50  => 30,
-        60  => 25,
-        70  => 20,
-        80  => 15,
-        90  => 10,
-        100 => 0,
+        10  => 1.1,
+        20  => 1.09,
+        30  => 1.08,
+        40  => 1.06,
+        50  => 1.05,
+        60  => 1.04,
+        70  => 1.03,
+        80  => 1.02,
+        90  => 1,
+        100 => 1,
     ],
 
-    'cleaning_before' => 
-    [
-        'yes' =>  0,
-        'no'  => 10,
-    ],
+    'cleaning_before' => 2,
 
     'floors' => 
     [
-        'hardwood'      => 5,
-        'cork'          => 5,
-        'vinyl'         => 5,
-        'concrete'      => 5,
-        'carpet'        => 5,
-        'natural_stone' => 5,
-        'tile'          => 5,
-        'laminate'      => 5,
+        'hardwood'      => 1,
+        'cork'          => 1,
+        'vinyl'         => 1,
+        'concrete'      => 1,
+        'carpet'        => 1,
+        'natural_stone' => 1,
+        'tile'          => 1,
+        'laminate'      => 1,
     ],
     
     'countertops' => 
     [
-        'concrete'      => 5,
-        'quartz'        => 5,
-        'formica'       => 5,
-        'granite'       => 5,
-        'marble'        => 5,
-        'tile'          => 5,
-        'paper_stone'   => 5,
-        'butcher_block' => 5,
+        'concrete'      => 1,
+        'quartz'        => 1,
+        'formica'       => 1,
+        'granite'       => 1,
+        'marble'        => 1,
+        'tile'          => 1,
+        'paper_stone'   => 1,
+        'butcher_block' => 1,
     ],
 
     'extras' => 

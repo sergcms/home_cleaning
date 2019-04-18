@@ -17,34 +17,41 @@
                     <div class="col-md-8">
                         <h6 class="font-weight-bold">Select extras</h6>
 
-                        <div class="form-group row" id="extras">
+                        <div class="form-group row extras" id="extras">
                             <i class="fas fa-ice-cream" 
                                 data-price="{{ config('price.inside_fridge') }}" 
-                                data-name="Inside Fridge">
+                                data-name="Inside Fridge"
+                                data-id="inside_fridge">
                             </i>
                             <i class="fas fa-calendar-week ml-3" 
                                 data-price="{{ config('price.inside_oven') }}"
-                                data-name="Inside Oven">
+                                data-name="Inside Oven"
+                                data-id="inside_oven">
                             </i>
                             <i class="fas fa-parking ml-3" 
                                 data-price="{{ config('price.garage_swept') }}"
-                                data-name="Garage Swept">
+                                data-name="Garage Swept"
+                                data-id="garage_swept">
                             </i>
                             <i class="far fa-address-book ml-3" 
                                 data-price="{{ config('price.inside_cabinets') }}"
-                                data-name="Inside Cabinets">
+                                data-name="Inside Cabinets"
+                                data-id="inside_cabinets">
                             </i>
                             <i class="fas fa-dumpster ml-3" 
                                 data-price="{{ config('price.laundry_wash_dry') }}"
-                                data-name="Laundry wash dry">
+                                data-name="Laundry wash dry"
+                                data-id="laundry_wash_dry">
                             </i>
                             <i class="fas fa-bed ml-3" 
                                 data-price="{{ config('price.bed_sheet_change') }}"
-                                data-name="Bed sheet change">
+                                data-name="Bed sheet change"
+                                data-id="bed_sheet_change">
                             </i>
                             <i class="fab fa-windows ml-3" 
                                 data-price="{{ config('price.blinds_cleaning') }}"
-                                data-name="Blings Cleaning">
+                                data-name="Blings Cleaning"
+                                data-id="blings_cleaning">
                             </i>
                         </div>
                         <hr>
@@ -144,7 +151,7 @@
 
                             </ul>
                             <div class="card-footer text-uppercase" id="total-price">
-                                today's total $138 
+                                {{-- today's total ${{ $total_sum }}  --}}
                             </div>
                         </div>
                     </div>

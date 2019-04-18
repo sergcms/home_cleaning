@@ -22,8 +22,9 @@ class HadTotalSumInOrder
         if (Session::get('personal_info.id')) {
             $order = Order::find(Session::get('personal_info.id'));
 
-            if ($order->total_sum > 0) {
-                return redirect()->route('extras');
+            if ($order) {
+                return $order->payment === 'pending' ? redirect()->route('extras') : $next($request);
+                // return $order->total_sum > 0 ? redirect()->route('extras') : $next($request);
             }
         }
 

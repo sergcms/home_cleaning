@@ -15,19 +15,10 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'first_name', 
-        'last_name', 
-        'address', 
-        'phone', 
-        'city', 
-        'apt', 
-        'zip_code', 
-        'square_footage', 
-        'hear_about_us', 
-        'email'
-    ];
+    protected $fillable = [ ];
 
+    protected $guarded = ['id'];
+    
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -48,6 +39,6 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return $this->belongsToMany('App\Order');
+        return $this->hasMany('App\Order');
     }
 }

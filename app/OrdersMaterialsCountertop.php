@@ -6,17 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrdersMaterialsCountertop extends Model
 {
-    protected $fillable = [
-        'order_id',
-        'concrete',
-        'quartz',
-        'formica',
-        'granite',
-        'marble',
-        'tile',
-        'paper_stone',
-        'butcher_block',
-    ];
+    protected $fillable = [ ];
+
+    protected $guarded = ['id'];
 
     public function order()
     {

@@ -16,6 +16,11 @@
                 </div>    
             @endif
 
+            {{-- @foreach ($info as $item)
+                {{ $item }}
+            @endforeach --}}
+            {{-- {{ $info->email }} --}}
+
             <form method="POST" action="{{ route('welcome-post') }}">
                 @csrf
 
@@ -23,7 +28,11 @@
                     <div class="col-md-6">
                         <select class="custom-select" id="bedrooms" name="bedrooms">
                             @for ($i = 1; $i <= config('price.count_bedrooms'); $i++)
-                                <option value="{{ $i }}">{{ $i }} bedroom(s)</option>
+                                @if (isset($info->bedrooms))
+                                    <option value="{{ $i }}" {{ $info->bedrooms == $i ? 'selected' : '' }} >{{ $i }} bedroom(s)</option>
+                                @else
+                                    <option value="{{ $i }}">{{ $i }} bedroom(s)</option>
+                                @endif
                             @endfor
                         </select>
 
@@ -37,7 +46,11 @@
                     <div class="col-md-6">
                         <select class="custom-select" id="bathrooms" name="bathrooms">
                             @for ($i = 0.5; $i <= config('price.count_bathrooms'); $i+=0.5)
-                                <option value="{{ $i }}">{{ $i }} bathroom(s)</option>
+                                @if (isset($info->bathrooms))
+                                    <option value="{{ $i }}" {{ $info->bathrooms == $i ? 'selected' : '' }} >{{ $i }} bathroom(s)</option>
+                                @else
+                                    <option value="{{ $i }}">{{ $i }} bathroom(s)</option>
+                                @endif
                             @endfor
                         </select>
 
@@ -51,7 +64,7 @@
                     <div class="col-md-4">
                         <label for="zip-code" class="col-md-12 col-form-label text-md-left">{{ __('ZIP Code') }}</label>
 
-                        <input id="zip-code" type="number" class="form-control{{ $errors->has('zip_code') ? ' is-invalid' : '' }}" name="zip_code" value="{{ old('zip_code') }}" required autofocus>
+                        <input id="zip-code" type="number" class="form-control{{ $errors->has('zip_code') ? ' is-invalid' : '' }}" name="zip_code" value="{{ $info->zip_code ?? old('zip_code') }}" required autofocus>
 
                         @if ($errors->has('zip_code'))
                             <span class="invalid-feedback" role="alert">
@@ -64,7 +77,7 @@
                     <div class="col-md-8">
                         <label for="email" class="col-md-12 col-form-label text-md-left">{{ __('EMail') }}</label>
 
-                        <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                        <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ $info->email ?? old('email') }}" required autofocus>
 
                         @if ($errors->has('email'))
                             <span class="invalid-feedback" role="alert">

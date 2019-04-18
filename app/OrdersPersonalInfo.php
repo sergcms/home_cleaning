@@ -6,15 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrdersPersonalInfo extends Model
 {
-    protected $fillable = [
-        'order_id',
-        'cleaning_frequency',
-        'cleaning_type',
-        'cleaning_date',
-    ];
+    protected $fillable = [ ];
+
+    protected $guarded = ['id'];
 
     public function order()
     {
-        return $this->hasOne('App\Order'); 
+        return $this->belongsTo('App\Order'); 
     }
 }
