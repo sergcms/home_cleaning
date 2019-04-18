@@ -16,11 +16,6 @@
                 </div>    
             @endif
 
-            {{-- @foreach ($info as $item)
-                {{ $item }}
-            @endforeach --}}
-            {{-- {{ $info->email }} --}}
-
             <form method="POST" action="{{ route('welcome-post') }}">
                 @csrf
 
@@ -28,11 +23,7 @@
                     <div class="col-md-6">
                         <select class="custom-select" id="bedrooms" name="bedrooms">
                             @for ($i = 1; $i <= config('price.count_bedrooms'); $i++)
-                                @if (isset($info->bedrooms))
-                                    <option value="{{ $i }}" {{ $info->bedrooms == $i ? 'selected' : '' }} >{{ $i }} bedroom(s)</option>
-                                @else
-                                    <option value="{{ $i }}">{{ $i }} bedroom(s)</option>
-                                @endif
+                                <option value="{{ $i }}" {{ $info->bedrooms == $i ? 'selected' : '' }} >{{ $i }} bedroom(s)</option>
                             @endfor
                         </select>
 
@@ -46,11 +37,7 @@
                     <div class="col-md-6">
                         <select class="custom-select" id="bathrooms" name="bathrooms">
                             @for ($i = 0.5; $i <= config('price.count_bathrooms'); $i+=0.5)
-                                @if (isset($info->bathrooms))
-                                    <option value="{{ $i }}" {{ $info->bathrooms == $i ? 'selected' : '' }} >{{ $i }} bathroom(s)</option>
-                                @else
-                                    <option value="{{ $i }}">{{ $i }} bathroom(s)</option>
-                                @endif
+                                <option value="{{ $i }}" {{ $info->bathrooms == $i ? 'selected' : '' }} >{{ $i }} bathroom(s)</option>
                             @endfor
                         </select>
 

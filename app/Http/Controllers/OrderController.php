@@ -64,14 +64,13 @@ class OrderController extends Controller
     public function welcome(Request $request)
     {
         if (Session::get('info.order_id')) {
-            $email  = $info_order->user->email;
-            $zip_code  = $info_order->zip_code;
-            $bedrooms  = $info_order->bedrooms;
-            $bathrooms = $info_order->bathrooms;
-
-            $info = compact('email', 'zip_code', 'bedrooms', 'bathrooms', 'email');
+            $order = Order::where('id', Session::get('info.order_id'))->first();
+            
+            $user = $order->user;
+                
+            $info = array_merge($order->toArray(), $user->toArray()) ?? new Order;
         } else {
-            $info = Session::get('info');
+            $info = Session::get('info') ?? new Order;
         }
         
         if ($request->getMethod() === 'POST') {
@@ -90,9 +89,13 @@ class OrderController extends Controller
 
     public function personalInfo(Request $request)
     {
-        $order_personal_info = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
-       
-        $order = $order_personal_info->order;
+        if (Session::get('info.order_id')) {
+            $order_personal_info = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
+
+            $order = $order_personal_info->order;
+        }  else {
+            $order = User::where('email', Session::get('info.email'))->first();
+        }
         
         if ($request->getMethod() === 'POST') {
 
@@ -151,14 +154,20 @@ class OrderController extends Controller
             return redirect()->route('your-home');
         }
         
-        return view('form.personal-info', ['order' => $order, 'order_personal_info' => $order_personal_info]);
+        return view('form.personal-info', ['order' => $order ?? new Order, 'order_personal_info' => $order_personal_info ?? new OrdersPersonalInfo]);
     }
 
     public function home(Request $request)
     {
+        dump(Session::all());
+
         $order_home = OrdersHome::where('order_id', Session::get('info.order_id'))->first();
-        
-        
+
+        dump($order_home);
+
+        $order_photos = OrdersPhoto::where('order_id', Session::get('info.order_id'))->get();
+
+        dd($order_photos);
         
         if ($request->getMethod() === 'POST') {
 
