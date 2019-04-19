@@ -1,12 +1,25 @@
 // progress bar on view home
-$('.block-progress').on('click', function(e) {
+function rateProgress(rate) {
     $('.block-progress').removeClass('bg-primary');
 
-    for (let i = 10; i <= $(this).data("rate"); i+=10) {
-        if ($('.block-progress').data('rate') <= $(this).data("rate")) {
+    // add class for blocks progress
+    for (let i = 10; i <= rate; i+=10) {
+        if ($('.block-progress').data('rate') <= rate) {
             $('#rate-' + i).addClass('bg-primary');  
         }
     }
+}
+
+// if value of table 
+if ($('#rate_home_cleanlines').val() > 0) {
+    rateProgress($('#rate_home_cleanlines').val());
+}
+
+// click 
+$('.block-progress').on('click', function(e) {
+    $('.block-progress').removeClass('bg-primary');
+
+    rateProgress($(this).data("rate"));
 
     $('#rate_home_cleanlines').val($(this).data("rate"));
 });
@@ -24,7 +37,7 @@ function readURL(input) {
     }
 }
 
-// diaplay extra services on view extras
+// check extra services on view extras
 $('#extras').on('click', function(e) {
 
     $(e.target).toggleClass('active');
@@ -32,6 +45,11 @@ $('#extras').on('click', function(e) {
     let price = $(e.target).data('price');
     let name = $(e.target).data('name');
     let item_id = $(e.target).data('id');
+
+    console.log(item_id);
+
+
+
 
     if (item_id == $('#'+item_id).attr('id')) {
         

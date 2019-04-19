@@ -8,6 +8,7 @@ use App\User;
 use App\Order;
 use Validator;
 use App\OrdersHome;
+use App\OrdersExtra;
 use App\OrdersPhoto;
 use App\CalculationSum;
 use App\OrdersMaterial;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 class OrderController extends Controller
 {
     
+    // validate rules for view welcome
     private $welcome_rules = 
     [
         'bedrooms'  => ['required', 'between:1,6'],
@@ -28,6 +30,7 @@ class OrderController extends Controller
         'email'     => ['required', 'string', 'email', 'max:255'],
     ];
 
+    // validate rules for view personal-info 
     private $personal_info_rules = 
     [
         'first_name'     => ['required', 'string'],
@@ -39,13 +42,16 @@ class OrderController extends Controller
         'phone'          => ['required'],
     ];
 
+    // validate rules for view your-home
     private $your_home_rules = 
     [
-        'rate_home_cleanlines' => ['required', 'in:10,20,30,40,50,60,70,80,90,100'],
+        'rate_home_cleanlines' => ['required', 'in:0,10,20,30,40,50,60,70,80,90,100'],
         'photos.*'             => ['mimes:jpeg,jpg,png', 'between:30,5000'],
     ];
 
-    // Validate data
+    /*
+    *
+    */
     public function validator($data, $rules)
     {
         return Validator::make($data, $rules)->validate();
@@ -90,9 +96,9 @@ class OrderController extends Controller
     public function personalInfo(Request $request)
     {
         if (Session::get('info.order_id')) {
-            $order_personal_info = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
+            $orders_personal_info = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
 
-            $order = $order_personal_info->order;
+            $order = $orders_personal_info->order;
         }  else {
             $order = User::where('email', Session::get('info.email'))->first();
         }
@@ -154,29 +160,30 @@ class OrderController extends Controller
             return redirect()->route('your-home');
         }
         
-        return view('form.personal-info', ['order' => $order ?? new Order, 'order_personal_info' => $order_personal_info ?? new OrdersPersonalInfo]);
+        return view('form.personal-info', [
+            'order' => $order ?? new Order, 
+            'orders_personal_info' => $orders_personal_info ?? new OrdersPersonalInfo
+        ]);
     }
 
     public function home(Request $request)
     {
-        dump(Session::all());
+        // Get collecion OrdersHome 
+        $orders_home   = OrdersHome::where('order_id', Session::get('info.order_id'))->first();
+        // Get colection OrdersPhoto 
+        $orders_photos = OrdersPhoto::where('order_id', Session::get('info.order_id'))->get();
 
-        $order_home = OrdersHome::where('order_id', Session::get('info.order_id'))->first();
-
-        dump($order_home);
-
-        $order_photos = OrdersPhoto::where('order_id', Session::get('info.order_id'))->get();
-
-        dd($order_photos);
-        
         if ($request->getMethod() === 'POST') {
-
+            // validate data
             $this->validator($request->all(), $this->your_home_rules);
-
-            // save photos home 
-            $this->savePhotosHome($request->file('photos'));
-
-            OrdersHome::create(
+            
+            if ($request->file('photos')) {
+                // save photos 
+                $this->savePhotosHome($request->file('photos'));
+            }
+            
+            OrdersHome::updateOrCreate(
+                ['order_id' => Session::get('info.order_id')],
                 [
                     'order_id'             => Session::get('info.order_id'),
                     'pet'                  => $request->pet,
@@ -191,16 +198,24 @@ class OrderController extends Controller
             return redirect()->route('materials');
         }
         
-        return view('form.your-home', ['order_home' => $order_home]);
+        return view('form.your-home', [
+            'orders_home'   => $orders_home ?? new OrdersHome,
+            'orders_photos' => $orders_photos,
+        ]);
     }
 
     public function materials(Request $request) 
     {
+        $orders_materials_floor = OrdersMaterialsFloor::where('order_id', Session::get('info.order_id'))->first();
+        $orders_materials_countertop = OrdersMaterialsCountertop::where('order_id', Session::get('info.order_id'))->first();
+        $orders_material = OrdersMaterial::where('order_id', Session::get('info.order_id'))->first();
+
         if ($request->getMethod() === 'POST') {
 
-            OrdersMaterialsFloor::create(
+            OrdersMaterialsFloor::updateOrCreate(
+                ['order_id' => Session::get('info.order_id')],
                 [
-                    'order_id'      => Session::get('personal_info.id'),
+                    'order_id'      => Session::get('info.order_id'),
                     'hardwood'      => $request->has('hardwood'),
                     'cork'          => $request->has('cork'),
                     'vinyl'         => $request->has('vinyl'),
@@ -212,9 +227,10 @@ class OrderController extends Controller
                 ]
             );
 
-            OrdersMaterialsCountertop::create(
+            OrdersMaterialsCountertop::updateOrCreate(
+                ['order_id' => Session::get('info.order_id')],
                 [
-                    'order_id'      => Session::get('personal_info.id'),
+                    'order_id'      => Session::get('info.order_id'),
                     'concrete'      => $request->has('concrete'),
                     'quartz'        => $request->has('quartz'),
                     'formica'       => $request->has('formica'),
@@ -226,9 +242,10 @@ class OrderController extends Controller
                 ]
             );
             
-            OrdersMaterial::create(
+            OrdersMaterial::updateOrCreate(
+                ['order_id' => Session::get('info.order_id')],
                 [
-                    'order_id'                    => Session::get('personal_info.id'),
+                    'order_id'                    => Session::get('info.order_id'),
                     'stainless_steel_application' => $request->stainless_steel_application == "yes" ? 1 : 0,
                     'type_stove'                  => $request->type_stove == "yes" ? 1 : 0,
                     'shower_doors_glass'          => $request->shower_doors_glass == "yes" ? 1 : 0,
@@ -238,29 +255,31 @@ class OrderController extends Controller
                 ]
             );
 
-            $this->sessionPut($request->all(), 'materials');
-
             return redirect()->route('extras');
         }
 
-        return view('form.materials');
+        return view('form.materials', [
+            'orders_materials_floor'      => $orders_materials_floor ?? new OrdersMaterialsFloor,
+            'orders_materials_countertop' => $orders_materials_countertop ?? new OrdersMaterialsCountertop,
+            'orders_material'             => $orders_material ?? new OrdersMaterial,
+        ]);
     }
 
-    public function extras(Request $request) {
+    public function extras(Request $request) 
+    {
+        $calculationSum = new CalculationSum();
+        $total_sum = $calculationSum->totalSum();
 
-        dump(Session::all());
+        $order = Order::find(Session::get('info.order_id'));
 
-        $order = new CalculationSum();
-
-        // $total_sum = $order->totalSum();
-
-        // Order::where('id', Session::get('personal_info.id'))
-                // ->update([ 'total_sum' => 200]);
+        $orders_extra = OrdersExtra::where('order_id', Session::get('info.order_id'))->first();
 
         if ($request->getMethod() === 'POST') {
 
+            // dd($request->all());
+
             OrderExtra::updateOrCreate(
-                [ 'order_id', Session::get('personal_info.id') ],
+                [ 'order_id', Session::get('info.order_id') ],
                 [
                     'inside_fridge'    => $request->inside_fridge,
                     'inside_oven'      => $request->inside_oven,
@@ -274,26 +293,30 @@ class OrderController extends Controller
                 ]
             );
 
-            $this->sessionPut($request->all(), 'extras');
-
+            return view('form.extras');
             // return redirect()->route('paymant');
         }
 
-        return view('form.extras');
+        return view('form.extras', [
+            'order'        => $order ?? new Order,
+            'orders_extra' => $orders_extra ?? new OrdersExtra, 
+            'total_sum'    => $total_sum
+        ]);
     }
 
     public function savePhotosHome($photos)
     {
-        // if (count($photos) > 8) {
-        //     return $message = 'Count photos not be most 8';
-        // }
+        if (count($photos) > 8) {
+            return $message = 'Count photos not be most 8';
+        }
 
         foreach ($photos as $photo) {
-
+            // save photo
             Storage::putFileAs('/public/images', $photo, $photo->hashName());        
 
+            // create record in table orders_photos 
             OrdersPhoto::create([
-                'order_id' => Session::get('personal_info.id'),
+                'order_id' => Session::get('info.order_id'),
                 'url'      => '/images/' . $photo->hashName() 
             ]);
         }

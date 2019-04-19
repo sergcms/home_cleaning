@@ -25,8 +25,8 @@ Route::group(['prefix' => '/order'], function () {
     Route::get('/materials', 'OrderController@materials')->middleware('hadtotalsum')->name('materials');
     Route::post('/materials', 'OrderController@materials')->middleware('hadtotalsum')->name('materials-post');
 
-    Route::get('/extras', 'OrderController@extras')->name('extras');
-    Route::post('/extras', 'OrderController@extras')->name('extras-post');
+    Route::get('/extras', 'OrderController@extras')->middleware('hadtotalsum')->name('extras');
+    Route::post('/extras', 'OrderController@extras')->middleware('hadtotalsum')->name('extras-post');
 
     Route::get('/payment', 'PaymentsController@show')->name('payment');
     Route::post('/payment', 'PaymentsController@save')->name('payment-post');

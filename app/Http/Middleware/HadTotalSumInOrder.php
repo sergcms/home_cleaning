@@ -20,8 +20,9 @@ class HadTotalSumInOrder
     public function handle($request, Closure $next)
     {
         if (Session::get('personal_info.id')) {
-            $order = Order::find(Session::get('personal_info.id'));
+            $order = Order::find(Session::get('info.order_id'));
 
+            dump($order);
             if ($order) {
                 return $order->payment === 'pending' ? redirect()->route('extras') : $next($request);
                 // return $order->total_sum > 0 ? redirect()->route('extras') : $next($request);

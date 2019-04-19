@@ -34,7 +34,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="pet" id="" value="none"
-                                {{ $order_your_home->pet == 'none' ? 'checked' : 'checked' }}>
+                                {{ $orders_home->pet == 'none' ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="pet">
                                     None
                                 </label>
@@ -42,7 +42,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="pet" id="" value="dog"
-                                {{ $order_your_home->pet == 'dog' ? 'checked' : '' }}>
+                                {{ $orders_home->pet == 'dog' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="pet">
                                     Dog
                                 </label>
@@ -50,7 +50,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="pet" id="" value="cat"
-                                {{ $order_your_home->pet == 'cat' ? 'checked' : '' }}>
+                                {{ $orders_home->pet == 'cat' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="pet">
                                     Cat
                                 </label>
@@ -58,7 +58,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="pet" id="" value="both"
-                                {{ $order_your_home->pet == 'both' ? 'checked' : '' }}>
+                                {{ $orders_home->pet == 'both' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="pet">
                                     Both
                                 </label>
@@ -70,7 +70,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="count_pets" id="" value="one"
-                                {{ $order_your_home->count_pets == 'one' ? 'checked' : 'checked' }}>
+                                {{ $orders_home->count_pets == 'one' ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="count_pets">
                                     1
                                 </label>
@@ -78,7 +78,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="count_pets" id="" value="two"
-                                {{ $order_your_home->count_pets == 'two' ? 'checked' : '' }}>
+                                {{ $orders_home->count_pets == 'two' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="count_pets">
                                     2
                                 </label>
@@ -86,7 +86,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="count_pets" id="" value="more"
-                                {{ $order_your_home->count_pets == 'more' ? 'checked' : '' }}>
+                                {{ $orders_home->count_pets == 'more' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="count_pets">
                                     3+
                                 </label>
@@ -98,7 +98,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="adults_people" id="" value="none"
-                                {{ $order_your_home->adults_people == 'none' ? 'checked' : 'checked' }}>
+                                {{ $orders_home->adults_people == 'none' ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="adults_people">
                                     None
                                 </label>
@@ -106,7 +106,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="adults_people" id="" value="one_two"
-                                {{ $order_your_home->adults_people == 'one_two' ? 'checked' : '' }}>
+                                {{ $orders_home->adults_people == 'one_two' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="adults_people">
                                     1 - 2
                                 </label>
@@ -114,7 +114,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="adults_people" id="" value="three_four"
-                                {{ $order_your_home->adults_people == 'three_four' ? 'checked' : '' }}>
+                                {{ $orders_home->adults_people == 'three_four' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="adults_people">
                                     3 - 4
                                 </label>
@@ -122,7 +122,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="adults_people" id="" value="more"
-                                {{ $order_your_home->adults_people == 'more' ? 'checked' : '' }}>
+                                {{ $orders_home->adults_people == 'more' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="adults_people">
                                     5 and more
                                 </label>
@@ -134,7 +134,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="children" id="" value="none"
-                                {{ $order_your_home->children == 'none' ? 'checked' : 'checked' }}>
+                                {{ $orders_home->children == 'none' ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="children">
                                     None
                                 </label>
@@ -142,7 +142,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="children" id="" value="one"
-                                {{ $order_your_home->children == 'one' ? 'checked' : '' }}>
+                                {{ $orders_home->children == 'one' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="children">
                                     1
                                 </label>
@@ -150,7 +150,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="children" id="" value="two"
-                                {{ $order_your_home->children == 'two' ? 'checked' : '' }}>
+                                {{ $orders_home->children == 'two' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="children">
                                     2
                                 </label>
@@ -158,7 +158,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="children" id="" value="more"
-                                {{ $order_your_home->children == 'more' ? 'checked' : '' }}>
+                                {{ $orders_home->children == 'more' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="children">
                                     3 and more
                                 </label>
@@ -177,7 +177,7 @@
                     <div class="col-md-8">
                         <h6 class="font-weight-bold">How would you rate your current home cleanliness?</h6>
 
-                        <input type="hidden" name="rate_home_cleanlines" value="{{ $order_your_home->rate_home_cleanlines ?? 10 }}" id="rate_home_cleanlines">
+                        <input type="hidden" name="rate_home_cleanlines" value="{{ $orders_home->rate_home_cleanlines ?? 0 }}" id="rate_home_cleanlines">
 
                         <div class="form-group row" id="progress">
                             <span class="block-progress" data-rate="10" id="rate-10"></span>
@@ -206,7 +206,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="cleaning_before" value="yes"
-                                {{ $order_your_home->cleaning_before == 1 ? 'checked' : 'checked' }}>
+                                {{ $orders_home->cleaning_before == 1 ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="cleaning_before">
                                     Yes
                                 </label>
@@ -214,7 +214,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_before" value="no"
-                                {{ $order_your_home->cleaning_before == 0 ? 'checked' : '' }}>
+                                {{ $orders_home->cleaning_before == 0 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning_before">
                                     No
                                 </label>
@@ -224,7 +224,7 @@
                 </div>
                 <hr>
 
-                @if (!isset($order_photos))
+                @if (count($orders_photos) == 0)
                     <div class="form-group row align-items-center">
                         <div class="col-md-4">
                             <span class="text-uppercase">home photos</span>

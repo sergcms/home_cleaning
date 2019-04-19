@@ -24,7 +24,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="once" 
-                                {{ $order_personal_info->cleaning_frequency == 'once' ? 'checked' : 'checked' }}>
+                                {{ $orders_personal_info->cleaning_frequency == 'once' ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="cleaning-frequency">
                                     Once
                                 </label>
@@ -32,7 +32,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="weekly"
-                                {{ $order_personal_info->cleaning_frequency == 'weekly' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_frequency == 'weekly' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-frequency">
                                     Weekly
                                 </label>
@@ -40,7 +40,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="biweekly"
-                                {{ $order_personal_info->cleaning_frequency == 'biweekly' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_frequency == 'biweekly' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-frequency">
                                     Biweekly
                                 </label>
@@ -48,7 +48,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="monthly"
-                                {{ $order_personal_info->cleaning_frequency == 'monthly' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_frequency == 'monthly' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-frequency">
                                     Monthly
                                 </label>
@@ -69,7 +69,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="cleaning_type" id="cleaning-type" value="deep of spring"
-                                {{ $order_personal_info->cleaning_type == 'deep of spring' ? 'checked' : 'checked' }}>
+                                {{ $orders_personal_info->cleaning_type == 'deep of spring' ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="cleaning-type">
                                     Deep of Spring
                                 </label>
@@ -77,7 +77,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_type" id="cleaning-type" value="move in"
-                                {{ $order_personal_info->cleaning_type == 'move in' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_type == 'move in' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-type">
                                     Move In
                                 </label>
@@ -85,7 +85,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_type" id="cleaning-type" value="move out"
-                                {{ $order_personal_info->cleaning_type == 'move out' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_type == 'move out' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-type">
                                     Move Out
                                 </label>
@@ -93,7 +93,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_type" id="cleaning-type" value="post remodeling"
-                                {{ $order_personal_info->cleaning_type == 'post remodeling' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_type == 'post remodeling' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-type">
                                     Post Remodeling
                                 </label>
@@ -114,7 +114,7 @@
                         <div class="form-group row">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="next available"
-                                {{ $order_personal_info->cleaning_date == 'next available' ? 'checked' : 'checked' }}>
+                                {{ $orders_personal_info->cleaning_date == 'next available' ? 'checked' : 'checked' }}>
                                 <label class="form-check-label" for="cleaning-date">
                                     Next available
                                 </label>
@@ -122,7 +122,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="this week"
-                                {{ $order_personal_info->cleaning_date == 'this week' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_date == 'this week' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-date">
                                     This week
                                 </label>
@@ -130,7 +130,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="next week"
-                                {{ $order_personal_info->cleaning_date == 'next week' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_date == 'next week' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-date">
                                     Next week
                                 </label>
@@ -138,7 +138,7 @@
         
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="this month"
-                                {{ $order_personal_info->cleaning_date == 'this month' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_date == 'this month' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-date">
                                     This Month
                                 </label>
@@ -146,7 +146,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="i am flexible"
-                                {{ $order_personal_info->cleaning_date == 'i am flexible' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_date == 'i am flexible' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-date">
                                     I am flexible
                                 </label>
@@ -154,7 +154,7 @@
 
                             <div class="form-check ml-3">
                                 <input class="form-check-input" type="radio" name="cleaning_date" id="cleaning-date" value="just need a quote"
-                                {{ $order_personal_info->cleaning_date == 'just need a quote' ? 'checked' : '' }}>
+                                {{ $orders_personal_info->cleaning_date == 'just need a quote' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="cleaning-date">
                                     Just need a quote
                                 </label>

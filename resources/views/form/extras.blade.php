@@ -61,28 +61,32 @@
     
                             <div class="form-group row">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="once" {{ Session::get('personal_info.cleaning_frequency') == 'once' ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="once" 
+                                    {{ $order->cleaning_frequency == 'once' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="cleaning-frequency">
                                         Once
                                     </label>
                                 </div>
             
                                 <div class="form-check ml-3">
-                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="weekly" {{ Session::get('personal_info.cleaning_frequency') == 'weekly' ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="weekly" 
+                                    {{ $order->cleaning_frequency == 'weekly' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="cleaning-frequency">
                                         Weekly
                                     </label>
                                 </div>
     
                                 <div class="form-check ml-3">
-                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="biweekly" {{ Session::get('personal_info.cleaning_frequency') == 'biweekly' ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="biweekly"
+                                    {{ $order->cleaning_frequency == 'biweekly' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="cleaning-frequency">
                                         Biweekly
                                     </label>
                                 </div>
             
                                 <div class="form-check ml-3">
-                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="monthly" {{ Session::get('personal_info.cleaning_frequency') == 'monthly' ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="radio" name="cleaning_frequency" id="cleaning-frequency" value="monthly"
+                                    {{ $order->cleaning_frequency == 'monthly' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="cleaning-frequency">
                                         Monthly
                                     </label>
@@ -151,7 +155,7 @@
 
                             </ul>
                             <div class="card-footer text-uppercase" id="total-price">
-                                {{-- today's total ${{ $total_sum }}  --}}
+                                today's total ${{ $total_sum }} 
                             </div>
                         </div>
                     </div>

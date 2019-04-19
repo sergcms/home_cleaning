@@ -127,6 +127,14 @@ return [
         'butcher_block' => 1,
     ],
 
+    'stainless_steel_application' => 2,
+
+    'type_stove' => 2,
+
+    'shower_doors_glass' => 2,
+
+    'mold' => 10,
+
     'extras' => 
     [
         'inside_fridge'    => 5,
@@ -139,42 +147,6 @@ return [
         'on_weekend'       => 5,
         'carpet_cleaned'   => 5,
     ],
-
-    'stainless_steel_application' =>
-    [
-        'yes' => 10,
-        'no'  =>  0,
-    ],
-
-    'type_stove' =>
-    [
-        'yes' => 10,
-        'no'  =>  0,
-    ],
-
-    'shower_doors_glass' =>
-    [
-        'yes' => 20,
-        'no'  =>  0,
-    ],
-
-    'mold' =>
-    [
-        'yes' => 20,
-        'no'  =>  0,
-    ],
-
-    'inside_fridge' => 25,
-
-    'inside_oven'   => 25,
-
-    'garage_swept'  => 25,
-
-    'inside_cabinets' => 25,
-
-    'laundry_wash_dry' => 25,
-
-    'bed_sheet_change' => 25,
 
     'blinds_cleaning' => 25,
 
