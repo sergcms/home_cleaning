@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use Session;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,9 +31,11 @@ Route::group(['prefix' => '/order'], function () {
     Route::post('/calc-extras', 'OrderController@calculationExtras')->middleware(['checksession', 'checkorderid', 'hadtotalsum']);
     Route::post('/extras', 'OrderController@extras')->middleware(['checksession', 'checkorderid', 'hadtotalsum'])->name('extras-post');
 
-    Route::get('/payment', 'PaymentsController@show')->middleware('hadtotalsum')->name('payment');
-    Route::post('/payment', 'PaymentsController@save')->middleware('hadtotalsum')->name('payment-post');
+    Route::get('/payment', 'PaymentController@show')->middleware('hadtotalsum')->name('payment');
+    Route::post('/payment', 'PaymentController@save')->middleware('hadtotalsum')->name('payment-post');
 
-    Route::post('/fail', 'PaymentsController@fail')->middleware('hadtotalsum')->name('payment-fail');
+    Route::post('/fail', 'PaymentController@fail')->middleware('hadtotalsum')->name('payment-fail');
 
 });
+
+// Route::get('/clear', function () { Session::flur(); });

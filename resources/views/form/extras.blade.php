@@ -179,10 +179,9 @@
                                 @endforeach
                                 {{-- <li class="list-group-item">Coupan - $0</li> --}}
                             </ul>
-                            <div class="card-footer text-uppercase" id="total-price" data-price={{ $calculationSum->total_sum }}>
+                            <div class="card-footer text-uppercase" id="total-price">
                                 today's total ${{ $calculationSum->total_sum }} 
                             </div>
-                            <input type="hidden" name="total_sum" id="total-sum" value="{{ $calculationSum->total_sum }}">
                         </div>
                     </div>
                 </div>

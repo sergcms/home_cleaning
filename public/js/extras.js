@@ -23,18 +23,16 @@ function send(extras) {
     });
 
     axios.post('/order/calc-extras', extras)
-    .then((response) => {
-        $.each(response.data, function (key, value) { 
-            $('#'+key).text("$"+value); 
-        });
+        .then((response) => {
+            $.each(response.data, function (key, value) { 
+                $('#'+key).text("$"+value); 
+            });
 
-        $('#total-sum').val(response.data.total_sum);
-        $('#total-price').data('price', response.data.total_sum);
-        $('#total-price').text("today's total $"+response.data.total_sum);
-    })
-    .catch((error) => { 
-        console.log(error); 
-    });
+            $('#total-price').text("today's total $"+response.data.total_sum);
+        })
+        .catch((error) => { 
+            console.log(error); 
+        });
 }
 
 // check extra services on view extras

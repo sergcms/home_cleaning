@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,41 +13,41 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function personalInfo()
     {
-        return $this->hasOne('App\OrdersPersonalInfo');
+        return $this->hasOne('App\Models\OrdersPersonalInfo');
     }
 
     public function home()
     {
-        return $this->hasOne('App\OrdersHome');
+        return $this->hasOne('App\Models\OrdersHome');
     }
 
     public function photos()
     {
-        return $this->hasMany('App\OrdersPhoto');
+        return $this->hasMany('App\Models\OrdersPhoto');
     }
 
     public function materials()
     {
-        return $this->hasOne('App\OrdersMaterial');
+        return $this->hasOne('App\Models\OrdersMaterial');
     }
 
     public function materialsCountertop()
     {
-        return $this->hasOne('App\OrdersMaterialsCountertop');
+        return $this->hasOne('App\Models\OrdersMaterialsCountertop');
     }
 
     public function materialsFloor()
     {
-        return $this->hasOne('App\OrdersMaterialsFloor');
+        return $this->hasOne('App\Models\OrdersMaterialsFloor');
     }
 
     public function extras()
     {
-        return $this->hasOne('App\OrdersExtra');
+        return $this->hasOne('App\Models\OrdersExtra');
     }
 }

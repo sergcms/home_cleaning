@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrdersMaterialsFloor extends Model
+class OrdersExtra extends Model
 {
     protected $fillable = [ ];
 
@@ -12,6 +12,6 @@ class OrdersMaterialsFloor extends Model
 
     public function order()
     {
-        return $this->hasOne('App\Order'); 
+        return $this->hasOne('App\Models\Order'); 
     }
 }

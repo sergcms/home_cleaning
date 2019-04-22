@@ -3,10 +3,10 @@
 namespace App;
 
 use Session;
-use App\Order;
-use App\OrdersHome;
-use App\OrdersPersonalInfo;
-use App\OrdersMaterialsFloor;
+use App\Models\Order;
+use App\Models\OrdersHome;
+use App\Models\OrdersPersonalInfo;
+use App\Models\OrdersMaterialsFloor;
 
 class CalculationSum
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +13,6 @@ class OrdersPhoto extends Model
 
     public function order()
     {
-        return $this->hasOne('App\Order'); 
+        return $this->hasOne('App\Models\Order'); 
     }
 }

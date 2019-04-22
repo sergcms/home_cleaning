@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use Session;
-use App\User;
-use App\Order;
+use App\Models\User;
+use App\Models\Order;
 use Validator;
-use App\OrdersHome;
-use App\OrdersExtra;
-use App\OrdersPhoto;
+use App\Models\OrdersHome;
+use App\Models\OrdersExtra;
+use App\Models\OrdersPhoto;
 use App\CalculationSum;
-use App\OrdersMaterial;
-use App\OrdersPersonalInfo;
+use App\Models\OrdersMaterial;
+use App\Models\OrdersPersonalInfo;
 use Illuminate\Http\Request;
-use App\OrdersMaterialsFloor;
-use App\OrdersMaterialsCountertop;
+use App\Models\OrdersMaterialsFloor;
+use App\Models\OrdersMaterialsCountertop;
 use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
@@ -274,12 +273,13 @@ class OrderController extends Controller
         $order = Order::find(Session::get('info.order_id'));
 
         // if method post then save data in table 
-        if ($request->getMethod() === 'POST') {           
+        if ($request->getMethod() === 'POST') {  
+            
             Order::where('id', Session::get('info.order_id'))->update([
-                'total_sum' => $request->total_sum,
+                'total_sum' => $total_sum,
             ]);
 
-            return redirect()->route('paymant');
+            return redirect()->route('payment');
         }
 
         return view('form.extras', [

@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Order;
+use App\Models\Order;
 use Session;
 
 class HadTotalSumInOrder
@@ -22,10 +22,8 @@ class HadTotalSumInOrder
         if (Session::get('personal_info.id')) {
             $order = Order::find(Session::get('info.order_id'));
 
-            dump($order);
             if ($order) {
-                return $order->payment === 'pending' ? redirect()->route('extras') : $next($request);
-                // return $order->total_sum > 0 ? redirect()->route('extras') : $next($request);
+                return $order->payment === 'pending' ? redirect()->route('payment') : $next($request);
             }
         }
 
