@@ -271,6 +271,8 @@ class OrderController extends Controller
         $total_sum = $calculationSum->totalSum();
         // Get model Order
         $order = Order::find(Session::get('info.order_id'));
+        // get data OrdersExtra
+        $order_extras = $order->extras;
 
         // if method post then save data in table 
         if ($request->getMethod() === 'POST') {  
@@ -284,6 +286,7 @@ class OrderController extends Controller
 
         return view('form.extras', [
             'order'               => $order ?? new Order,
+            'order_extras'        => $order_extras ?? new OrdersExtra,
             'calculationSum'      => $calculationSum,    
         ]);
     }

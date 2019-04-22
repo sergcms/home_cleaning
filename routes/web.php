@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Session;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,5 +36,3 @@ Route::group(['prefix' => '/order'], function () {
     Route::post('/fail', 'PaymentController@fail')->middleware('hadtotalsum')->name('payment-fail');
 
 });
-
-// Route::get('/clear', function () { Session::flur(); });

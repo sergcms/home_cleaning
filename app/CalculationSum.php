@@ -5,8 +5,11 @@ namespace App;
 use Session;
 use App\Models\Order;
 use App\Models\OrdersHome;
+use App\Models\OrdersExtra;
+use App\Models\OrdersMaterial;
 use App\Models\OrdersPersonalInfo;
 use App\Models\OrdersMaterialsFloor;
+use App\Models\OrdersMaterialsCountertop;
 
 class CalculationSum
 {
