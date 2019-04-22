@@ -17,15 +17,15 @@ class CreateOrdersExtrasTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
-            $table->boolean('inside_fridge');
-            $table->boolean('inside_oven');
-            $table->boolean('garage_swept');
-            $table->boolean('inside_cabinets');
-            $table->boolean('laundry_wash_dry');
-            $table->boolean('bed_sheet_change');
-            $table->boolean('blinds_cleaning');
-            $table->boolean('on_weekend');
-            $table->boolean('carpet_cleaned');
+            $table->boolean('inside_fridge')->default(0);
+            $table->boolean('inside_oven')->default(0);
+            $table->boolean('garage_swept')->default(0);
+            $table->boolean('inside_cabinets')->default(0);
+            $table->boolean('laundry_wash_dry')->default(0);
+            $table->boolean('bed_sheet_change')->default(0);
+            $table->boolean('blinds_cleaning')->default(0);
+            $table->boolean('on_weekend')->default(0);
+            $table->boolean('carpet_cleaned')->default(0);
             $table->timestamps();
         });
     }

@@ -268,39 +268,62 @@ class OrderController extends Controller
     public function extras(Request $request) 
     {
         $calculationSum = new CalculationSum();
+        // calculation total sum
         $total_sum = $calculationSum->totalSum();
-
+        // Get model Order
         $order = Order::find(Session::get('info.order_id'));
 
-        $orders_extra = OrdersExtra::where('order_id', Session::get('info.order_id'))->first();
+        // if method post then save data in table 
+        if ($request->getMethod() === 'POST') {           
+            Order::where('id', Session::get('info.order_id'))->update([
+                'total_sum' => $request->total_sum,
+            ]);
 
-        if ($request->getMethod() === 'POST') {
-
-            // dd($request->all());
-
-            OrderExtra::updateOrCreate(
-                [ 'order_id', Session::get('info.order_id') ],
-                [
-                    'inside_fridge'    => $request->inside_fridge,
-                    'inside_oven'      => $request->inside_oven,
-                    'garage_swept'     => $request->garage_swept,
-                    'inside_cabinets'  => $request->inside_cabinets,
-                    'laundry_wash_dry' => $request->laundry_wash_dry,
-                    'bed_sheet_change' => $request->bed_sheet_change,
-                    'blinds_cleaning'  => $request->blinds_cleaning,
-                    'on_weekend'       => $request->on_weekend == 'yes' ? 1 : 0,
-                    'carpet_cleaned'   => $request->carpet_cleaned == 'yes' ? 1 : 0,
-                ]
-            );
-
-            return view('form.extras');
-            // return redirect()->route('paymant');
+            return redirect()->route('paymant');
         }
 
         return view('form.extras', [
-            'order'        => $order ?? new Order,
-            'orders_extra' => $orders_extra ?? new OrdersExtra, 
-            'total_sum'    => $total_sum
+            'order'               => $order ?? new Order,
+            'calculationSum'      => $calculationSum,    
+        ]);
+    }
+
+    public function calculationExtras(Request $request)
+    {
+        OrdersExtra::updateOrCreate(
+            [ 'order_id' => Session::get('info.order_id') ],
+            [
+                'inside_fridge'    => $request->inside_fridge,
+                'inside_oven'      => $request->inside_oven,
+                'garage_swept'     => $request->garage_swept,
+                'inside_cabinets'  => $request->inside_cabinets,
+                'laundry_wash_dry' => $request->laundry_wash_dry,
+                'bed_sheet_change' => $request->bed_sheet_change,
+                'blinds_cleaning'  => $request->blinds_cleaning,
+                'on_weekend'       => $request->on_weekend,
+                'carpet_cleaned'   => $request->carpet_cleaned,
+            ]
+        );
+
+        OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))
+            ->update(
+                [
+                    'cleaning_frequency' => $request->cleaning_frequency,
+                ]
+        );
+
+        $calculationSum = new CalculationSum();
+
+        // calculation total sum
+        $total_sum = $calculationSum->totalSum();
+
+        return response()->json([
+            'once'      => $calculationSum->once,
+            'weekly'    => $calculationSum->weekly,
+            'biweekly'  => $calculationSum->biweekly,
+            'monthly'   => $calculationSum->monthly,
+            'total_sum' => $total_sum
+            
         ]);
     }
 

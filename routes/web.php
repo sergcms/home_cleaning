@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,23 +18,22 @@ Route::post('/', 'OrderController@welcome')->name('welcome-post');
 
 Route::group(['prefix' => '/order'], function () {
    
-    Route::get('/personal-info', 'OrderController@personalInfo')->middleware('hadtotalsum')->name('personal-info');
-    Route::post('/personal-info', 'OrderController@personalInfo')->middleware('hadtotalsum')->name('personal-info-post');
+    Route::get('/personal-info', 'OrderController@personalInfo')->middleware(['checksession', 'hadtotalsum'])->name('personal-info');
+    Route::post('/personal-info', 'OrderController@personalInfo')->middleware(['checksession', 'hadtotalsum'])->name('personal-info-post');
 
-    Route::get('/home', 'OrderController@home')->middleware('hadtotalsum')->name('your-home');
-    Route::post('/home', 'OrderController@home')->middleware('hadtotalsum')->name('your-home-post');
+    Route::get('/home', 'OrderController@home')->middleware(['checksession', 'checkorderid', 'hadtotalsum'])->name('your-home');
+    Route::post('/home', 'OrderController@home')->middleware(['checksession', 'checkorderid', 'hadtotalsum'])->name('your-home-post');
 
-    Route::get('/materials', 'OrderController@materials')->middleware('hadtotalsum')->name('materials');
-    Route::post('/materials', 'OrderController@materials')->middleware('hadtotalsum')->name('materials-post');
+    Route::get('/materials', 'OrderController@materials')->middleware(['checksession', 'checkorderid', 'hadtotalsum'])->name('materials');
+    Route::post('/materials', 'OrderController@materials')->middleware(['checksession', 'checkorderid', 'hadtotalsum'])->name('materials-post');
 
-    Route::get('/extras', 'OrderController@extras')->middleware('hadtotalsum')->name('extras');
-    Route::post('/extras', 'OrderController@extras')->middleware('hadtotalsum')->name('extras-post');
+    Route::get('/extras', 'OrderController@extras')->middleware(['checksession', 'checkorderid', 'hadtotalsum'])->name('extras');
+    Route::post('/calc-extras', 'OrderController@calculationExtras')->middleware(['checksession', 'checkorderid', 'hadtotalsum']);
+    Route::post('/extras', 'OrderController@extras')->middleware(['checksession', 'checkorderid', 'hadtotalsum'])->name('extras-post');
 
-    Route::get('/payment', 'PaymentsController@show')->name('payment');
-    Route::post('/payment', 'PaymentsController@save')->name('payment-post');
+    Route::get('/payment', 'PaymentsController@show')->middleware('hadtotalsum')->name('payment');
+    Route::post('/payment', 'PaymentsController@save')->middleware('hadtotalsum')->name('payment-post');
 
-    Route::post('/fail', 'PaymentsController@fail')->name('payment-fail');
+    Route::post('/fail', 'PaymentsController@fail')->middleware('hadtotalsum')->name('payment-fail');
 
 });
-
-// Auth::routes();

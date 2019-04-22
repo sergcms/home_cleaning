@@ -224,7 +224,7 @@
                 </div>
                 <hr>
 
-                @if (count($orders_photos) == 0)
+                {{-- @if (count($orders_photos) == 0) --}}
                     <div class="form-group row align-items-center">
                         <div class="col-md-4">
                             <span class="text-uppercase">home photos</span>
@@ -246,7 +246,7 @@
                         @endif
                     </div>
                     <hr>
-                @endif
+                {{-- @endif --}}
 
                 <div class="form-group row mt-3">
                     <div class="col-md-8 offset-md-4">

@@ -44,7 +44,11 @@
         @yield('footer')
     </div>
 
-    <!-- Script progress bar-->
-    <script src="{{ asset('js/script.js') }}" defer></script>
+    <!-- Script rate progress bar-->
+    <script src="{{ asset('js/rate-progress.js') }}" defer></script>
+    <!-- Script display photo-->
+    <script src="{{ asset('js/photos.js') }}" defer></script>
+    <!-- Script extra services -->
+    <script src="{{ asset('js/extras.js') }}" defer></script>
 </body>
 </html>

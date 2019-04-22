@@ -61,6 +61,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'hadtotalsum' => \App\Http\Middleware\HadTotalSumInOrder::class,
+        'checksession' => \App\Http\Middleware\CheckIsSession::class,
+        'checkorderid' => \App\Http\Middleware\CheckIsInSessionOrder::class,
     ];
 
     /**

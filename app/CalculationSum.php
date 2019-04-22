@@ -7,17 +7,31 @@ use App\Order;
 use App\OrdersHome;
 use App\OrdersPersonalInfo;
 use App\OrdersMaterialsFloor;
-use Illuminate\Database\Eloquent\Model;
 
-class CalculationSum extends Model
+class CalculationSum
 {
+    // How often would you like us to come
+    public $once;
+    public $weekly;
+    public $beweekly;
+    public $monthly; 
+
+    // total summa 
+    public $total_sum;
+
     public function calculationOrder()
     {
-        $order = Order::find(Session::get('info.order_id'));
+        $sum = 0;
+        
+        try {
+            $order = Order::find(Session::get('info.order_id'));
 
-        $sum  = config('price.bedrooms.'.$order->bedrooms);
-        $sum += config('price.bathrooms.' . $order->bathrooms);
-        $sum += $order->square_footage * config('price.square_footage');
+            $sum  = config('price.bedrooms.'.$order->bedrooms);
+            $sum += config('price.bathrooms.' . $order->bathrooms);
+            $sum += $order->square_footage * config('price.square_footage');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
 
         return $sum;
     }
@@ -26,8 +40,7 @@ class CalculationSum extends Model
     {
         $personalInfo = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
 
-        $sum  = $this->calculationOrder() * config('price.cleaning_frequency.' . $personalInfo->cleaning_frequency);
-        $sum *= config('price.cleaning_type.' . $personalInfo->cleaning_type);
+        $sum  = $this->calculationOrder() * config('price.cleaning_type.' . $personalInfo->cleaning_type);
         $sum += config('price.cleaning_date.' . $personalInfo->cleaning_date);
 
         return $sum;
@@ -69,8 +82,8 @@ class CalculationSum extends Model
     {
         $materials_floor = OrdersMaterialsFloor::where('order_id', Session::get('info.order_id'))->first();
         $sum = 0;
-
-        foreach ($materials_floor->attributes as $key => $value) {
+      
+        foreach ($materials_floor->getAttributes() as $key => $value) {
             $sum += $this->checkField($key, $value, 'floors');
         }
 
@@ -82,7 +95,7 @@ class CalculationSum extends Model
         $materials_countertop = OrdersMaterialsCountertop::where('order_id', Session::get('info.order_id'))->first();
         $sum=0;
 
-        foreach ($materials_countertop->attributes as $key => $value) {
+        foreach ($materials_countertop->getAttributes() as $key => $value) {
             $sum += $this->checkField($key, $value, 'countertops');
         }
 
@@ -107,12 +120,13 @@ class CalculationSum extends Model
 
     public function calculationExtras()
     {
-        $extra = OrdersExtra::where('order_id', Session::get('info.order_id'))->first();
+        $extras = OrdersExtra::where('order_id', Session::get('info.order_id'))->first();
+        
         $sum=0;
 
-        if (isset($extra->attributes)) {
-            foreach ($extra->attributes as $key => $value) {
-                $sum += $this->checkField($key, $value, 'extra');
+        if ($extras) {
+            foreach ($extras->getAttributes() as $key => $value) {
+                $sum += $this->checkField($key, $value, 'extras');
             }
         }
 
@@ -121,10 +135,15 @@ class CalculationSum extends Model
 
     public function totalSum()
     {
-        dump($this->calculationExtras());
+        $personalInfo = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
+        
+        $this->once      = round(($this->calculationMaterials() + $this->calculationExtras()) * config('price.cleaning_frequency.once'), 2);
+        $this->weekly    = round(($this->calculationMaterials() + $this->calculationExtras()) * config('price.cleaning_frequency.weekly'), 2);
+        $this->biweekly  = round(($this->calculationMaterials() + $this->calculationExtras()) * config('price.cleaning_frequency.biweekly'), 2);
+        $this->monthly   = round(($this->calculationMaterials() + $this->calculationExtras()) * config('price.cleaning_frequency.monthly'), 2);
 
-        $total_sum = $this->calculationMaterials();
-
-        return round($total_sum, 2);
+        $this->total_sum = round(($this->calculationMaterials() + $this->calculationExtras()) * config('price.cleaning_frequency.' . $personalInfo->cleaning_frequency), 2);
+        
+        return $this->total_sum;
     }
 }

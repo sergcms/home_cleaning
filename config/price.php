@@ -11,12 +11,12 @@ return [
     'count_bathrooms' => 3,
 
     'bedrooms' => [
-        1 => 100,
-        2 => 120,
-        3 => 130,
-        4 => 150,
-        5 => 180,
-        6 => 200,
+        1 => 50,
+        2 => 70,
+        3 => 85,
+        4 => 100,
+        5 => 120,
+        6 => 150,
     ],
 
     'bathrooms' => [
@@ -144,11 +144,8 @@ return [
         'laundry_wash_dry' => 5,
         'bed_sheet_change' => 5,
         'blinds_cleaning'  => 5,
-        'on_weekend'       => 5,
-        'carpet_cleaned'   => 5,
+        'on_weekend'       => 20,
+        'carpet_cleaned'   => 20,
     ],
 
-    'blinds_cleaning' => 25,
-
-    'carpet_cleaned' => 25,
 ];
