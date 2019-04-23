@@ -19,12 +19,11 @@ class PaymentController extends Controller
     public function show()
     {
         // get Order model 
-        // $order = Order::find(Session::get('info.order_id'));
-        $order = Order::find(1);
+        $order = Order::find(Session::get('info.order_id'));
 
-        // if (!$order) {
-        //     return redirect()->route('welcome');
-        // }
+        if (!$order) {
+            return redirect()->route('welcome');
+        }
 
         return view('form.payment', ['order' => $order]);
     }
@@ -33,27 +32,28 @@ class PaymentController extends Controller
     {
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        // get Order model 
-        // $order = Order::find(Session::get('info.order_id'));
+        if (!$request->stripeToken) {
+            $message = "No token!";
 
-        $order = Order::find(10);
+            return view('paid', ['message' => $message]);
+        }
+
+        // get Order model 
+        $order = Order::find(Session::get('info.order_id'));
+
         // get User model
         $user = $order->user;
-        // total sum without dot
-        $total = str_replace('.', '', $order->total_sum); 
-        
+
+        $total = (int)round($order->total_sum * 100, 0);
+
         if (!$user->stripe_id) {
             // create new Customer
             $customer = $this->createCustomer($user);
         }
 
-        if (!$user->asStripeCustomer()->default_source) {
-            $message = 'You have not registered card in Stripe, please add card!';
-
-            return view('paid', ['message' => $message]);
-        }
-
         if ($order->personalInfo->cleaning_frequency == 'once') {
+            // create new Card
+            $user->updateCard($request->stripeToken);
             // payment one time
             $payment = $user->charge($total);
             $payment = $payment->paid;
@@ -81,14 +81,6 @@ class PaymentController extends Controller
 
             return view('paid', ['message' => $message]);
         }
-
-        // $cards = $user->cards([
-        //     'number'      => 4242424242424242,
-        //     'exp_month'   => 8,
-        //     'exp_year'    => 2022,
-        //     'cvc'         => 123,
-        //     'name'        => $user->first_name . ' ' . $user->last_name,
-        // ])->create($stripeCustomerId, env('STRIPE_KEY'));
 
         $message = "Thank you, payment was successful!";
 

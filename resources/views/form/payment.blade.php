@@ -36,7 +36,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h3 class="card-title text-center">Payment Stripe</h3>
+            <h3 class="card-title text-center">Pay for home cleaning - ${{ $order->total_sum }}</h3>
             <hr>
             <form method="POST" action="{{ route('payment-post') }}" id="payment-form">
                 @csrf
@@ -52,7 +52,7 @@
                 
                 <div class="form-group row mt-3">
                     <div class="col-md-8">
-                        <button type="submit" class="btn btn-success btn-lg">
+                        <button type="submit" class="btn btn-success btn-lg" id="payment-btn">
                             {{ __('Pay') }}
                         </button>
                     </div>
@@ -67,6 +67,9 @@
     <footer>
         <script src="https://js.stripe.com/v3/"></script>
         <script type="text/javascript">
+
+        window.onload = function() {
+            
             // Create a Stripe client.
             var stripe = Stripe("{{ env('STRIPE_KEY') }}");
 
@@ -131,26 +134,6 @@
                 var form = document.getElementById('payment-form');
                 var hiddenInput = document.createElement('input');
 
-                var stripeToken = token.id;
-                $("#stripe_token").val(stripeToken);
-
-                // stripe.customers.create({
-                //     email: 'foo-customer@example.com',
-                //     source: {
-                //         object: 'card',
-                //         exp_month: 10,
-                //         exp_year: 2018,
-                //         number: '4242424242424242',
-                //         cvc: 100
-                //     }
-                // }).then(function(customer) {
-                //     return stripe.charges.create({
-                //         amount: 1600,
-                //         currency: 'usd',
-                //         customer: customer.id
-                //     });
-                // });
-
                 hiddenInput.setAttribute('type', 'hidden');
                 hiddenInput.setAttribute('name', 'stripeToken');
                 hiddenInput.setAttribute('value', token.id);
@@ -159,6 +142,8 @@
                 // Submit the form
                 form.submit();
             }
+        }
+
         </script>
     </footer>
 @endsection
