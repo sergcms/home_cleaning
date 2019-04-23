@@ -40,6 +40,10 @@ class CreateCashierTable extends Migration
      */
     public function down()
     {
+        Schema::table('users', function ($table) {
+            $table->dropColumn(['stripe_id', 'card_brand', 'card_last_four', 'trial_ends_at']);
+        });
+        
         Schema::table('subscriptions', function (Blueprint $table) {
             Schema::dropIfExists('subscriptions');
         });

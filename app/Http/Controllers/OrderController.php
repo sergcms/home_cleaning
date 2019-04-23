@@ -279,6 +279,7 @@ class OrderController extends Controller
             
             Order::where('id', Session::get('info.order_id'))->update([
                 'total_sum' => $total_sum,
+                'payment'   => 'pending',
             ]);
 
             return redirect()->route('payment');

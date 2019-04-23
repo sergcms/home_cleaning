@@ -1,84 +1,57 @@
 @extends('layouts.layout')
 
+<style>
+    /**
+    * The CSS shown here will not be introduced in the Quickstart guide, but shows
+    * how you can use CSS to style your Element's container.
+    */
+    .StripeElement {
+        min-width: 400px;
+        box-sizing: border-box;
+        height: 40px;
+        padding: 10px 12px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background-color: white;
+        box-shadow: 0 1px 3px 0 #e6ebf1;
+        -webkit-transition: box-shadow 150ms ease;
+        transition: box-shadow 150ms ease;
+    }
+
+    .StripeElement--focus {
+        box-shadow: 0 1px 3px 0 #cfd7df;
+    }
+
+    .StripeElement--invalid {
+        border-color: #fa755a;
+        color: #fa755a;
+    }
+
+    .StripeElement--webkit-autofill {
+        background-color: #fefde5 !important;
+    }
+</style>
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h3 class="card-title text-center">Payment Stripe</h3>
             <hr>
-
-            <form method="POST" action="{{ route('payment-post') }}">
+            <form method="POST" action="{{ route('payment-post') }}" id="payment-form">
                 @csrf
 
-                <div class="form-group row align-items-center">
-                    <div class="col-md-4">
-                        <span class="text-uppercase">card info</span>
+                <div class="form-row align-items-center">
+                    <div id="card-element">
+                      <!-- A Stripe Element will be inserted here. -->
                     </div>
-    
-                    <div class="col-md-4">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="card" class="col-md-12 col-form-label text-md-left">{{ __('Card') }}</label>
-        
-                                <input id="card" type="text" class="form-control{{ $errors->has('card') ? ' is-invalid' : '' }}" name="card" value="{{ old('card') }}" required autofocus>
-        
-                                @if ($errors->has('card'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('card') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-        
-                            <div class="col-md-12">
-                                <label for="exp_mounth" class="col-md-12 col-form-label text-md-left">{{ __('Exp. month') }}</label>
-        
-                                <input id="exp_mounth" type="number" class="form-control{{ $errors->has('exp_mounth') ? ' is-invalid' : '' }}" name="exp_mounth" value="{{ old('exp_mounth') }}" required autofocus>
-        
-                                @if ($errors->has('exp_mounth'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('exp_mounth') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="exp_year" class="col-md-12 col-form-label text-md-left">{{ __('Exp. year') }}</label>
-        
-                                <input id="exp_year" type="number" class="form-control{{ $errors->has('exp_year') ? ' is-invalid' : '' }}" name="exp_year" value="{{ old('exp_year') }}" required autofocus>
-        
-                                @if ($errors->has('exp_year'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('exp_year') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="cvc" class="col-md-12 col-form-label text-md-left">{{ __('CVC') }}</label>
-        
-                                <input id="cvc" type="number" class="form-control{{ $errors->has('cvc') ? ' is-invalid' : '' }}" name="cvc" value="{{ old('cvc') }}" required autofocus>
-        
-                                @if ($errors->has('cvc'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('cvc') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-    
-                            <div class="col-md-12">
-                                <label for="exp_year" class="col-md-12 col-form-label text-md-left text-uppercase">Total for payment - <strong>${{ $order->total_sum}}</strong></label>
-                            </div>
-
-                           
-                        </div>
-                       <!-- /.row --> 
-                    </div>
-                    <!-- /.col -->
+                
+                    <!-- Used to display form errors. -->
+                    <div id="card-errors" role="alert" class="ml-3"></div>
                 </div>
-                <!-- /.row -->
-
+                
                 <div class="form-group row mt-3">
-                    <div class="col-md-8 offset-md-4">
+                    <div class="col-md-8">
                         <button type="submit" class="btn btn-success btn-lg">
                             {{ __('Pay') }}
                         </button>
@@ -92,6 +65,100 @@
 
 @section('footer')  
     <footer>
-        
+        <script src="https://js.stripe.com/v3/"></script>
+        <script type="text/javascript">
+            // Create a Stripe client.
+            var stripe = Stripe("{{ env('STRIPE_KEY') }}");
+
+            // Create an instance of Elements.
+            var elements = stripe.elements();
+
+            // Custom styling can be passed to options when creating an Element.
+            // (Note that this demo uses a wider set of styles than the guide below.)
+            var style = {
+                base: {
+                    color: '#32325d',
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                }
+            };
+
+            // Create an instance of the card Element.
+            var card = elements.create('card', {style: style});
+
+            // Add an instance of the card Element into the `card-element` <div>.
+            card.mount('#card-element');
+
+            // Handle real-time validation errors from the card Element.
+            card.addEventListener('change', function(event) {
+                var displayError = document.getElementById('card-errors');
+               
+                if (event.error) {
+                    displayError.textContent = event.error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+
+            // Handle form submission.
+            var form = document.getElementById('payment-form');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                stripe.createToken(card).then(function(result) {
+                    if (result.error) {
+                        // Inform the user if there was an error.
+                        var errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = result.error.message;
+                    } else {
+                        // Send the token to your server.
+                        stripeTokenHandler(result.token);
+                    }
+                });
+            });
+
+            // Submit the form with the token ID.
+            function stripeTokenHandler(token) {
+                // Insert the token ID into the form so it gets submitted to the server
+                var form = document.getElementById('payment-form');
+                var hiddenInput = document.createElement('input');
+
+                var stripeToken = token.id;
+                $("#stripe_token").val(stripeToken);
+
+                // stripe.customers.create({
+                //     email: 'foo-customer@example.com',
+                //     source: {
+                //         object: 'card',
+                //         exp_month: 10,
+                //         exp_year: 2018,
+                //         number: '4242424242424242',
+                //         cvc: 100
+                //     }
+                // }).then(function(customer) {
+                //     return stripe.charges.create({
+                //         amount: 1600,
+                //         currency: 'usd',
+                //         customer: customer.id
+                //     });
+                // });
+
+                hiddenInput.setAttribute('type', 'hidden');
+                hiddenInput.setAttribute('name', 'stripeToken');
+                hiddenInput.setAttribute('value', token.id);
+                form.appendChild(hiddenInput);
+
+                // Submit the form
+                form.submit();
+            }
+        </script>
     </footer>
 @endsection

@@ -6,7 +6,7 @@ use Closure;
 use App\Models\Order;
 use Session;
 
-class HadTotalSumInOrder
+class CheckStatusPaymentOrder
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class HadTotalSumInOrder
      */
     public function handle($request, Closure $next)
     {
-        if (Session::get('personal_info.id')) {
+        if (Session::get('info')) {
             $order = Order::find(Session::get('info.order_id'));
 
             if ($order) {
