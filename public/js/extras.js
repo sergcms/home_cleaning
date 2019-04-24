@@ -13,6 +13,7 @@ let extras = {
     'cleaning_frequency' : '',  
 }
 
+// send data
 function send(extras) {
     extras['cleaning_frequency'] = $('.cleaning_frequency:checked').val();
     

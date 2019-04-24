@@ -10,12 +10,12 @@ function rateProgress(rate) {
     }
 }
 
-// if value of table 
+// if value from table 
 if ($('#rate_home_cleanlines').val() > 0) {
     rateProgress($('#rate_home_cleanlines').val());
 }
 
-// click 
+// change rate
 $('.block-progress').on('click', function(e) {
     $('.block-progress').removeClass('bg-primary');
 
