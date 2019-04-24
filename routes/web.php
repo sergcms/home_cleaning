@@ -30,7 +30,7 @@ Route::group(['prefix' => '/order'], function () {
     Route::post('/calc-extras', 'OrderController@calculationExtras')->middleware(['checksession', 'checkorderid', 'checkstatuspaymet']);
     Route::post('/extras', 'OrderController@extras')->middleware(['checksession', 'checkorderid', 'checkstatuspaymet'])->name('extras-post');
 
-    Route::get('/payment', 'PaymentController@show')->name('payment');
-    Route::post('/payment', 'PaymentController@charge')->name('payment-post');
+    Route::get('/payment', 'PaymentController@show')->middleware(['checksession', 'checkorderid'])->name('payment');
+    Route::post('/payment', 'PaymentController@charge')->middleware(['checksession', 'checkorderid', 'checkstripetoken'])->name('payment-post');
 
 });

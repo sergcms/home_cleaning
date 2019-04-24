@@ -22,6 +22,9 @@ class CalculationSum
     // total summa 
     public $total_sum;
 
+    /**
+     * calculation sum from table orders
+     */
     public function calculationOrder()
     {
         $sum = 0;
@@ -39,6 +42,9 @@ class CalculationSum
         return $sum;
     }
 
+    /**
+     * calculation sum from table orders_personal_infos
+     */
     public function calculationOrderPersonalInfo()
     {
         $personalInfo = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
@@ -49,6 +55,9 @@ class CalculationSum
         return $sum;
     }
 
+    /**
+     * calculation sum from table orders_homes
+     */
     public function calculationOrderHome()
     {
         $home = OrdersHome::where('order_id', Session::get('info.order_id'))->first();
@@ -68,6 +77,9 @@ class CalculationSum
         return $sum;
     }
 
+    /**
+     * return value from config price 
+     */
     public function checkField(string $key, $value, string $nameArrPrice)
     {
         $val = 0;
@@ -81,6 +93,9 @@ class CalculationSum
         return $val;
     }
 
+    /**
+     * calculation sum from table orders_materials_floors
+     */
     public function calculationOrderMaterialsFloor()
     {
         $materials_floor = OrdersMaterialsFloor::where('order_id', Session::get('info.order_id'))->first();
@@ -93,10 +108,13 @@ class CalculationSum
         return $sum;
     }
 
+    /**
+     * calculation sum from table orders_materials_countertops
+     */
     public function calculationOrderMaterialsCountertop()
     {
         $materials_countertop = OrdersMaterialsCountertop::where('order_id', Session::get('info.order_id'))->first();
-        $sum=0;
+        $sum = 0;
 
         foreach ($materials_countertop->getAttributes() as $key => $value) {
             $sum += $this->checkField($key, $value, 'countertops');
@@ -105,6 +123,9 @@ class CalculationSum
         return $sum;
     }
 
+    /**
+     * calculation sum all materials
+     */
     public function calculationMaterials()
     {
         $sum = $this->calculationOrderHome() 
@@ -121,11 +142,14 @@ class CalculationSum
         return $sum;
     }
 
+    /**
+     * calculation sum from table orders_extras
+     */
     public function calculationExtras()
     {
         $extras = OrdersExtra::where('order_id', Session::get('info.order_id'))->first();
         
-        $sum=0;
+        $sum = 0;
 
         if ($extras) {
             foreach ($extras->getAttributes() as $key => $value) {
@@ -136,6 +160,9 @@ class CalculationSum
         return $sum;
     }
 
+    /**
+     * calculation total sum
+     */
     public function totalSum()
     {
         $personalInfo = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();

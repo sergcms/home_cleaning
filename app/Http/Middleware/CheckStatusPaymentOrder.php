@@ -11,8 +11,9 @@ class CheckStatusPaymentOrder
     /**
      * Handle an incoming request.
      *
-     * check whether total amount was generated,  
-     * if yes, redirect to route('extras')
+     * check status payment,  
+     * if paid - show view('paid')
+     * if pending - redirect to route('payment')
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed
@@ -23,7 +24,15 @@ class CheckStatusPaymentOrder
             $order = Order::find(Session::get('info.order_id'));
 
             if ($order) {
-                return $order->payment === 'pending' ? redirect()->route('payment') : $next($request);
+                if ($order->payment === 'pending') {
+
+                    return redirect()->route('payment');
+
+                } elseif ($order->payment === 'paid') {
+                    $message = "Thank you, payment was successful!";
+
+                    return view('paid', ['message' => $message]);
+                }
             }
         }
 

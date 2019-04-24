@@ -67,9 +67,7 @@
     <footer>
         <script src="https://js.stripe.com/v3/"></script>
         <script type="text/javascript">
-
         window.onload = function() {
-            
             // Create a Stripe client.
             var stripe = Stripe("{{ env('STRIPE_KEY') }}");
 
@@ -143,7 +141,6 @@
                 form.submit();
             }
         }
-
         </script>
     </footer>
 @endsection

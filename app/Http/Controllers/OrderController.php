@@ -48,15 +48,17 @@ class OrderController extends Controller
         'photos.*'             => ['mimes:jpeg,jpg,png', 'between:30,5000'],
     ];
 
-    /*
-    *
-    */
+    /**
+     * validate data 
+     */
     public function validator($data, $rules)
     {
         return Validator::make($data, $rules)->validate();
     }
-    
-    // Put in session array data
+
+    /**
+     * Put in session array data
+     */
     public function sessionPut($data, $name)
     {
         foreach ($data as $key => $value) {
@@ -66,24 +68,29 @@ class OrderController extends Controller
         }
     }
     
+    /**
+     * action welcome, work with view('welcome')
+     */
     public function welcome(Request $request)
     {
         if (Session::get('info.order_id')) {
+            // get model Order
             $order = Order::where('id', Session::get('info.order_id'))->first();
-            
+            // get User
             $user = $order->user;
-                
+            // merge array
             $info = array_merge($order->toArray(), $user->toArray()) ?? new Order;
         } else {
+            // get info from session
             $info = Session::get('info') ?? new Order;
         }
         
         if ($request->getMethod() === 'POST') {
-
+            // validate data
             $this->validator($request->all(), $this->welcome_rules);
-
+            // put session
             $this->sessionPut($request->all(), 'info');
-
+            // get User
             $user = User::where('email', $request->email)->first();
 
             return redirect()->route('personal-info');
@@ -92,20 +99,25 @@ class OrderController extends Controller
         return view('welcome', ['info' => (object)$info]);
     }
 
+    /**
+     * action personalInfo, work with view('personal-info')
+     */
     public function personalInfo(Request $request)
     {
         if (Session::get('info.order_id')) {
+            // get OrdersPersonalInfo
             $orders_personal_info = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
-
+            // get Order
             $order = $orders_personal_info->order;
         }  else {
+            // get Order
             $order = User::where('email', Session::get('info.email'))->first();
         }
         
         if ($request->getMethod() === 'POST') {
-
+            // validate data
             $this->validator($request->all(), $this->personal_info_rules);
-
+            // update or create User
             User::updateOrCreate(
                 ['email' => Session::get('info.email')],
                 [
@@ -121,10 +133,11 @@ class OrderController extends Controller
                     'zip_code'       => Session::get('info.zip_code'),
                 ]
             );
-            
+            // get User
             $user = User::where('email', Session::get('info.email'))->first();
-
+            // check User
             if ($user) {
+                // update or create Order
                 $order = Order::updateOrCreate(
                     [ 'id' => Session::get('info.order_id') ],
                     [
@@ -142,7 +155,7 @@ class OrderController extends Controller
                     ]
                 );
             }
-
+            // update or create OrdersPersonalInfo
             OrdersPersonalInfo::updateOrCreate(
                 [ 'id' => Session::get('info.order_id') ],
                 [
@@ -152,7 +165,7 @@ class OrderController extends Controller
                     'cleaning_date'      => $request->cleaning_date, 
                 ]
             );
-
+            // put session
             Session::put('info.user_id', $user->id);
             Session::put('info.order_id', $order->id);
 
@@ -165,11 +178,14 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * action home, work with view('your-home')
+     */
     public function home(Request $request)
     {
-        // Get collecion OrdersHome 
+        // get OrdersHome 
         $orders_home   = OrdersHome::where('order_id', Session::get('info.order_id'))->first();
-        // Get colection OrdersPhoto 
+        // get OrdersPhoto 
         $orders_photos = OrdersPhoto::where('order_id', Session::get('info.order_id'))->get();
 
         if ($request->getMethod() === 'POST') {
@@ -180,7 +196,7 @@ class OrderController extends Controller
                 // save photos 
                 $this->savePhotosHome($request->file('photos'));
             }
-            
+            // update or create OrdersHome
             OrdersHome::updateOrCreate(
                 ['order_id' => Session::get('info.order_id')],
                 [
@@ -203,14 +219,20 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * action materials, work with view('materials')
+     */
     public function materials(Request $request) 
     {
+        // get OrdersMaterialsFloor
         $orders_materials_floor = OrdersMaterialsFloor::where('order_id', Session::get('info.order_id'))->first();
+        // get OrdersMaterialsCountertop
         $orders_materials_countertop = OrdersMaterialsCountertop::where('order_id', Session::get('info.order_id'))->first();
+        // get OrdersMaterial
         $orders_material = OrdersMaterial::where('order_id', Session::get('info.order_id'))->first();
 
         if ($request->getMethod() === 'POST') {
-
+            // update or create OrdersMaterialsFloor
             OrdersMaterialsFloor::updateOrCreate(
                 ['order_id' => Session::get('info.order_id')],
                 [
@@ -225,7 +247,7 @@ class OrderController extends Controller
                     'laminate'      => $request->has('laminate'),
                 ]
             );
-
+            // update or create OrdersMaterialsCountertop
             OrdersMaterialsCountertop::updateOrCreate(
                 ['order_id' => Session::get('info.order_id')],
                 [
@@ -240,7 +262,7 @@ class OrderController extends Controller
                     'butcher_block' => $request->has('butcher_block'),
                 ]
             );
-            
+            // update or create OrdersMaterial
             OrdersMaterial::updateOrCreate(
                 ['order_id' => Session::get('info.order_id')],
                 [
@@ -264,19 +286,21 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * action extras, work with view('extras')
+     */
     public function extras(Request $request) 
     {
         $calculationSum = new CalculationSum();
         // calculation total sum
         $total_sum = $calculationSum->totalSum();
-        // Get model Order
+        // get Order
         $order = Order::find(Session::get('info.order_id'));
-        // get data OrdersExtra
+        // get OrdersExtra
         $order_extras = $order->extras;
 
-        // if method post then save data in table 
         if ($request->getMethod() === 'POST') {  
-            
+            // update Order
             Order::where('id', Session::get('info.order_id'))->update([
                 'total_sum' => $total_sum,
                 'payment'   => 'pending',
@@ -292,8 +316,12 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * calculation sum, total sum on view('extras')
+     */
     public function calculationExtras(Request $request)
     {
+        // update or create OrdersExtra
         OrdersExtra::updateOrCreate(
             [ 'order_id' => Session::get('info.order_id') ],
             [
@@ -308,7 +336,7 @@ class OrderController extends Controller
                 'carpet_cleaned'   => $request->carpet_cleaned,
             ]
         );
-
+        // update or create OrdersPersonalInfo
         OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))
             ->update(
                 [
@@ -317,7 +345,6 @@ class OrderController extends Controller
         );
 
         $calculationSum = new CalculationSum();
-
         // calculation total sum
         $total_sum = $calculationSum->totalSum();
 
@@ -331,6 +358,9 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * save photos 
+     */
     public function savePhotosHome($photos)
     {
         if (count($photos) > 8) {

@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'checkstatuspaymet' => \App\Http\Middleware\CheckStatusPaymentOrder::class,
         'checksession' => \App\Http\Middleware\CheckIsSession::class,
         'checkorderid' => \App\Http\Middleware\CheckIsInSessionOrder::class,
+        'checkstripetoken' => \App\Http\Middleware\CheckStripeToken::class,
     ];
 
     /**
