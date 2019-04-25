@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
-    
     // validate rules for view welcome
     private $welcome_rules = 
     [
@@ -291,13 +290,14 @@ class OrderController extends Controller
      */
     public function extras(Request $request) 
     {
-        $calculationSum = new CalculationSum();
-        // calculation total sum
-        $total_sum = $calculationSum->totalSum();
         // get Order
         $order = Order::find(Session::get('info.order_id'));
         // get OrdersExtra
         $order_extras = $order->extras;
+
+        $calculationSum = new CalculationSum($order);
+        // calculation total sum
+        $total_sum = $calculationSum->totalSum();
 
         if ($request->getMethod() === 'POST') {  
             // update Order
@@ -344,7 +344,10 @@ class OrderController extends Controller
                 ]
         );
 
-        $calculationSum = new CalculationSum();
+        // get Order
+        $order = Order::find(Session::get('info.order_id'));
+
+        $calculationSum = new CalculationSum($order);
         // calculation total sum
         $total_sum = $calculationSum->totalSum();
 

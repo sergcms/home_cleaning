@@ -21,6 +21,13 @@ class CalculationSum
 
     // total summa 
     public $total_sum;
+    // order id
+    public $order_id;
+
+    public function __construct(Order $order)
+    {
+        $this->order_id = $order->id;
+    }
 
     /**
      * calculation sum from table orders
@@ -30,7 +37,7 @@ class CalculationSum
         $sum = 0;
         
         try {
-            $order = Order::find(Session::get('info.order_id'));
+            $order = Order::find($this->order_id);
 
             $sum  = config('price.bedrooms.'.$order->bedrooms);
             $sum += config('price.bathrooms.' . $order->bathrooms);
@@ -47,7 +54,7 @@ class CalculationSum
      */
     public function calculationOrderPersonalInfo()
     {
-        $personalInfo = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
+        $personalInfo = OrdersPersonalInfo::where('order_id', $this->order_id)->first();
 
         $sum  = $this->calculationOrder() * config('price.cleaning_type.' . $personalInfo->cleaning_type);
         $sum += config('price.cleaning_date.' . $personalInfo->cleaning_date);
@@ -60,7 +67,7 @@ class CalculationSum
      */
     public function calculationOrderHome()
     {
-        $home = OrdersHome::where('order_id', Session::get('info.order_id'))->first();
+        $home = OrdersHome::where('order_id', $this->order_id)->first();
         
         $sum = $this->calculationOrderPersonalInfo();
 
@@ -98,7 +105,7 @@ class CalculationSum
      */
     public function calculationOrderMaterialsFloor()
     {
-        $materials_floor = OrdersMaterialsFloor::where('order_id', Session::get('info.order_id'))->first();
+        $materials_floor = OrdersMaterialsFloor::where('order_id', $this->order_id)->first();
         $sum = 0;
       
         foreach ($materials_floor->getAttributes() as $key => $value) {
@@ -113,7 +120,7 @@ class CalculationSum
      */
     public function calculationOrderMaterialsCountertop()
     {
-        $materials_countertop = OrdersMaterialsCountertop::where('order_id', Session::get('info.order_id'))->first();
+        $materials_countertop = OrdersMaterialsCountertop::where('order_id', $this->order_id)->first();
         $sum = 0;
 
         foreach ($materials_countertop->getAttributes() as $key => $value) {
@@ -132,7 +139,7 @@ class CalculationSum
             + $this->calculationOrderMaterialsFloor()
             + $this->calculationOrderMaterialsCountertop();
         
-        $materials = OrdersMaterial::where('order_id', Session::get('info.order_id'))->first();
+        $materials = OrdersMaterial::where('order_id', $this->order_id)->first();
 
         $sum += $materials->stainless_steel_application? config('price.stainless_steel_application') : 0;
         $sum += $materials->type_stove ? config('price.type_stove') : 0;
@@ -147,7 +154,7 @@ class CalculationSum
      */
     public function calculationExtras()
     {
-        $extras = OrdersExtra::where('order_id', Session::get('info.order_id'))->first();
+        $extras = OrdersExtra::where('order_id', $this->order_id)->first();
         
         $sum = 0;
 
@@ -165,7 +172,7 @@ class CalculationSum
      */
     public function totalSum()
     {
-        $personalInfo = OrdersPersonalInfo::where('order_id', Session::get('info.order_id'))->first();
+        $personalInfo = OrdersPersonalInfo::where('order_id', $this->order_id)->first();
         
         $this->once      = round(($this->calculationMaterials() + $this->calculationExtras()) * config('price.cleaning_frequency.once'), 2);
         $this->weekly    = round(($this->calculationMaterials() + $this->calculationExtras()) * config('price.cleaning_frequency.weekly'), 2);
