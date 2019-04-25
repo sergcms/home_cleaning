@@ -14,6 +14,15 @@ use Laravel\Cashier\Billable;
 
 class Payment
 {
+
+    /**
+     * prepare amount for stripe
+     */
+    public function prepareAmount($total)
+    {
+        return (int)round($total * 100, 0);
+    }
+
     /**
      * create new customer
      */
@@ -36,7 +45,7 @@ class Payment
     /**
      * create new plan
      */
-    public function createPlan(Order $order, $total)
+    public function createPlan(Order $order)
     {
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -61,7 +70,7 @@ class Payment
                 "name" => $order->first_name . ' ' . $order->last_name
             ],
             'nickname' => $order->personalInfo->cleaning_frequency,
-            'amount'   => $total,
+            'amount'   => $this->prepareAmount($order->total_sum),
             'interval_count' => $order->personalInfo->cleaning_frequency == 'biweekly' ? 2 : 1,
         ]);
 
@@ -75,10 +84,10 @@ class Payment
     /**
      * check payment
      */
-    public function checkPayment($payment = false)
+    public function checkPayment(Order $order, $payment = false)
     {
         if ($payment) {
-            Order::where('id', Session::get('info.order_id'))
+            Order::find($order->id)
                 ->update([
                     'payment'      => 'paid',
                     'date_payment' => Carbon::now(),
@@ -86,7 +95,7 @@ class Payment
 
             return true;
         } else {
-            Order::where('id', Session::get('info.order_id'))->update([
+            Order::find($order->id)->update([
                 'payment'   => 'failed',
             ]);
                 

@@ -40,9 +40,10 @@ class PaymentController extends Controller
         $order = Order::find(Session::get('info.order_id'));
         // get User model
         $user = $order->user;
-        $total = (int)round($order->total_sum * 100, 0);
 
         $payment = new Payment();
+
+        $total = $payment->prepareAmount($order->total_sum);
 
         if (!$user->stripe_id) {
             // create new Customer
@@ -72,7 +73,7 @@ class PaymentController extends Controller
         }
 
         // check payment
-        if(!$payment->checkPayment($pay)) {
+        if(!$payment->checkPayment($order, $pay)) {
             $message = "Sorry, payment did not go well, try again later!";
             
             return view('paid', ['message' => $message]); 
