@@ -3,19 +3,20 @@
 namespace App\Http\Controllers;
 
 use Session;
+use Validator;
+use App\InvoicePDF;
 use App\Models\User;
 use App\Models\Order;
-use Validator;
+use App\CalculationSum;
 use App\Models\OrdersHome;
 use App\Models\OrdersExtra;
 use App\Models\OrdersPhoto;
-use App\CalculationSum;
+use Illuminate\Http\Request;
 use App\Models\OrdersMaterial;
 use App\Models\OrdersPersonalInfo;
-use Illuminate\Http\Request;
 use App\Models\OrdersMaterialsFloor;
-use App\Models\OrdersMaterialsCountertop;
 use Illuminate\Support\Facades\Storage;
+use App\Models\OrdersMaterialsCountertop;
 
 class OrderController extends Controller
 {
@@ -299,7 +300,19 @@ class OrderController extends Controller
         // calculation total sum
         $total_sum = $calculationSum->totalSum();
 
-        if ($request->getMethod() === 'POST') {  
+        // if per_cleaning is null, we do record value
+        if (!$order->per_cleaning) {
+            $order->update([
+                'per_cleaning' => $total_sum,
+            ]);
+        }
+        
+        if ($request->getMethod() === 'POST') {
+            
+            // work with pdf
+            $pdf = new InvoicePDF();
+            $pdf->extraName($order);
+
             // update Order
             Order::where('id', Session::get('info.order_id'))->update([
                 'total_sum' => $total_sum,

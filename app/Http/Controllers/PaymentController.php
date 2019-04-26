@@ -78,9 +78,12 @@ class PaymentController extends Controller
             
             return view('paid', ['message' => $message]); 
         };
+
+        // $this->createPDF($order);
+
         // session clear
         Session::flush();
-        
+  
         $message = "Thank you, payment was successful!";
 
         return view('paid', ['message' => $message]);

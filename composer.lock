@@ -4,8 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2db28be5e8754ae5cd3e471389900565",
+    "content-hash": "722672d0573c053bc47c6b4ae8f1c071",
     "packages": [
+        {
+            "name": "consoletvs/invoices",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ConsoleTVs/Invoices.git",
+                "reference": "f0d02f1f6456315c45c13941f19aa5ed8daba57c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ConsoleTVs/Invoices/zipball/f0d02f1f6456315c45c13941f19aa5ed8daba57c",
+                "reference": "f0d02f1f6456315c45c13941f19aa5ed8daba57c",
+                "shasum": ""
+            },
+            "require": {
+                "dompdf/dompdf": "^0.8",
+                "ext-bcmath": "*",
+                "illuminate/support": "5.*",
+                "illuminate/view": "5.*",
+                "nesbot/carbon": ">1.22"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ConsoleTVs\\Invoices\\InvoicesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ConsoleTVs\\Invoices\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Erik Campobadal",
+                    "email": "ConsoleTVs@gmail.com"
+                }
+            ],
+            "description": "Generate PDF invoices for your customers in laravel",
+            "keywords": [
+                "Erik Campobadal",
+                "create",
+                "customers",
+                "generate",
+                "invoices",
+                "laravel",
+                "open source",
+                "pdf"
+            ],
+            "time": "2019-03-24T11:56:54+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",

@@ -161,7 +161,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        ConsoleTVs\Invoices\InvoicesServiceProvider::class,
+        
         /*
          * Package Service Providers...
          */
