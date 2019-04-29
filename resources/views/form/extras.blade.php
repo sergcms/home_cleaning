@@ -164,8 +164,8 @@
                                 </span>
                             </div>
                             <ul class="list-group list-group-flush" id="list-services">
-                                <li class="list-group-item">Per cleaning - $138</li>
-                                <li class="list-group-item">Initial cleaning - $138</li>
+                                <li class="list-group-item">Per cleaning - ${{ $order->per_cleaning }}</li>
+                                {{-- <li class="list-group-item">Initial cleaning - $138</li> --}}
                                 @foreach ($order_extras as $key => $value)
                                     @if ($value === 1)
                                         <li class='list-group-item extra' id='{{ $key }}'>{{ $key }} - ${{ config('price.extras.' . $key) }}</li>
