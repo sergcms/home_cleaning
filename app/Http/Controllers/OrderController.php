@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Session;
 use Validator;
-use App\InvoicePDF;
 use App\Models\User;
 use App\Models\Order;
 use App\CalculationSum;
@@ -306,13 +305,8 @@ class OrderController extends Controller
                 'per_cleaning' => $total_sum,
             ]);
         }
-        
-        if ($request->getMethod() === 'POST') {
-            
-            // work with pdf
-            $pdf = new InvoicePDF();
-            $pdf->extraName($order);
 
+        if ($request->getMethod() === 'POST') {
             // update Order
             Order::where('id', Session::get('info.order_id'))->update([
                 'total_sum' => $total_sum,

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Session;
+use App\Payment;
 use Stripe\Stripe;
+use App\InvoicePDF;
 use App\Models\User;
 use Stripe\Customer;
 use App\Models\Order;
 use Laravel\Cashier\Card;
-use App\Payment;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Billable;
 
@@ -79,7 +80,10 @@ class PaymentController extends Controller
             return view('paid', ['message' => $message]); 
         };
 
-        // $this->createPDF($order);
+         // work with pdf
+         $pdf = new InvoicePDF();
+         // create pdf invoice 
+         $pdf->createPDF($order);
 
         // session clear
         Session::flush();

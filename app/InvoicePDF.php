@@ -4,7 +4,7 @@ namespace App;
 
 use App\Models\Order;
 use App\Models\OrdersExtra;
-use \ConsoleTVs\Invoices\Classes\Invoice as PDF;
+use \ConsoleTVs\Invoices\Classes\Invoice as OrderPDF;
 
 class InvoicePDF
 {
@@ -24,13 +24,15 @@ class InvoicePDF
         // $order->personalInfo;
 
         // generate invoice and save
-        $invoice = PDF::make()
+        $invoice = OrderPDF::make()
             ->addItem('Per cleaning house', $order->per_cleaning);
-        
-            // add extra service
-        foreach ($order->extras->getAttributes() as $key => $value) {
-            if (($value == 1) && ($key != 'id') && ($key != 'order_id')) {
-                $invoice->addItem($this->generateNameFromKey($key), config('price.extras.' . $key));
+
+        // add extra services
+        if ($order->extras != null) {
+            foreach ($order->extras->getAttributes() as $key => $value) {
+                if (($value == 1) && ($key != 'id') && ($key != 'order_id')) {
+                    $invoice->addItem($this->generateNameFromKey($key), config('price.extras.' . $key));
+                }
             }
         }
 
@@ -44,6 +46,6 @@ class InvoicePDF
             ])
             // ->total($order->total_sum)
             // ->notes('')
-            ->save('public/order-' . $order->id .  '.pdf');
+            ->save('/public/orders/order-' . $order->id . '.pdf');
     }
 }
