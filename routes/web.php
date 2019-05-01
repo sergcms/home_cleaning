@@ -34,3 +34,8 @@ Route::group(['prefix' => '/order'], function () {
     Route::post('/payment', 'PaymentController@charge')->middleware(['checksession', 'checkorderid', 'checkstripetoken'])->name('payment-post');
 
 });
+
+// dashboard
+Route::get('/dashboard', 'DashboardController@show');
+Route::get('/dashboard/orders', 'DashboardController@getOrders');
+Route::post('/dashboard/orders', 'DashboardController@getOrders');

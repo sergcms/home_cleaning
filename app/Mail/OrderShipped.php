@@ -38,6 +38,6 @@ class OrderShipped extends Mailable
         return $this->view('message')
             ->subject('Home cleaning, your order ' . $this->id)
             ->attach('public/storage/orders/order-' . $this->id . '.pdf', 
-            ['order' . $this->id . '.pdf',  'mime' => 'application/pdf' ]);
+                ['order' . $this->id . '.pdf',  'mime' => 'application/pdf' ]);
     }
 }
