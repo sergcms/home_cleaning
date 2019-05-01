@@ -12,6 +12,8 @@ use App\Models\OrdersExtra;
 use App\Models\OrdersPhoto;
 use Illuminate\Http\Request;
 use App\Models\OrdersMaterial;
+use App\Events\CreateOrderEvent;
+use App\Events\UpdateOrderEvent;
 use App\Models\OrdersPersonalInfo;
 use App\Models\OrdersMaterialsFloor;
 use Illuminate\Support\Facades\Storage;
@@ -167,6 +169,9 @@ class OrderController extends Controller
             // put session
             Session::put('info.user_id', $user->id);
             Session::put('info.order_id', $order->id);
+
+            // create event new order
+            CreateOrderEvent::dispatch($order);
 
             return redirect()->route('your-home');
         }

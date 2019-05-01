@@ -12,6 +12,8 @@ use App\Models\Order;
 use Laravel\Cashier\Card;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Billable;
+use App\Events\CreateOrderEvent;
+use App\Events\UpdateOrderEvent;
 
 class PaymentController extends Controller
 {
@@ -80,13 +82,17 @@ class PaymentController extends Controller
             return view('paid', ['message' => $message]); 
         };
 
-         // work with pdf
-         $pdf = new InvoicePDF();
-         // create pdf invoice 
-         $pdf->createPDF($order);
+        // work with pdf
+        $pdf = new InvoicePDF();
+        // create pdf invoice 
+        $pdf->createPDF($order);
 
-        // session clear
-        Session::flush();
+        
+        // update event order
+        UpdateOrderEvent::dispatch($order);
+
+        // session clear info
+        Session::forget('info');
   
         $message = "Thank you, payment was successful!";
 
