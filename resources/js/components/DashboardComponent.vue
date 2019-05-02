@@ -153,9 +153,7 @@
 
           var data = this.getData();
 
-          // if (this.current_page != 1) {
-            data.page = this.current_page;
-          // }
+          data.page = this.current_page;
 
           this.sendData(data);
 
@@ -204,8 +202,6 @@
             this.prev_page_url = response.data.prev_page_url;
             this.next_page_url = response.data.next_page_url;
             this.total_orders  = response.data.total;
-
-            console.log(response);
           })
           .catch((error) => { 
             console.log(error); 

@@ -1991,10 +1991,9 @@ __webpack_require__.r(__webpack_exports__);
       _this.message = 'Change order № ' + data_order.order.id + '!';
       console.log(data_order);
 
-      var data = _this.getData(); // if (this.current_page != 1) {
+      var data = _this.getData();
 
-
-      data.page = _this.current_page; // }
+      data.page = _this.current_page;
 
       _this.sendData(data); // var index = this.orders.findIndex(function (order) {
       //   return order.id == data_order.order.id; 
@@ -2040,7 +2039,6 @@ __webpack_require__.r(__webpack_exports__);
         _this2.prev_page_url = response.data.prev_page_url;
         _this2.next_page_url = response.data.next_page_url;
         _this2.total_orders = response.data.total;
-        console.log(response);
       })["catch"](function (error) {
         console.log(error);
       });
