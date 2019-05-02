@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Validator;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
 
 class CreateUser extends Command
 {
@@ -48,11 +49,12 @@ class CreateUser extends Command
         $validator = Validator::make(
             [
                 'email' => $email, 
-                'password' => 'password'
+                'password' => $password,
+                'password_confirmation' => $password_confirmation,
             ], 
             [
                 'email' => 'required|email|unique:users', 
-                'password' => 'required|confirmed|between:8,20'
+                'password' => 'required|confirmed|between:6,20',
             ]
         );
 
@@ -62,11 +64,13 @@ class CreateUser extends Command
             return $this->line($messages);
         }
         
-        // User::create([
-        //     'email'    => $email,
-        //     'password' => $password,
-        // ]);
+        User::create([
+            'email'    => $email,
+            'password' => Hash::make($password),
+        ]);
 
-        return TRUE;
+        $this->info('user with email ' . $email . ' created!');
+
+        return true;
     }
 }

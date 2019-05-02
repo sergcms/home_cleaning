@@ -35,7 +35,11 @@ Route::group(['prefix' => '/order'], function () {
 
 });
 
+Route::group(['prefix' => '/admin'], function () {
+    Auth::routes(['register' => false]);
+});
+
 // dashboard
-Route::get('/dashboard', 'DashboardController@show');
-Route::get('/dashboard/orders', 'DashboardController@getOrders');
-Route::post('/dashboard/orders', 'DashboardController@getOrders');
+Route::get('/dashboard', 'DashboardController@show')->middleware('auth')->name('dashboard');
+Route::get('/dashboard/orders', 'DashboardController@getOrders')->middleware('auth');
+Route::post('/dashboard/orders', 'DashboardController@getOrders')->middleware('auth');

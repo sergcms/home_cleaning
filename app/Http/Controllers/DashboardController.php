@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Events\CreateOrderEvent;
 use Illuminate\Http\Request;
-
 use Illuminate\Contracts\Support\JsonableInterface;
 
 class DashboardController extends Controller
@@ -15,8 +13,6 @@ class DashboardController extends Controller
      */
     public function show()
     {
-        // CreateOrder::dispatch(Order::find(1));
-
         return view('dashboard');
     }
 
