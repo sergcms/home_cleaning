@@ -52,7 +52,7 @@ class SendMail extends Command
             foreach ($this->orders as $key => $order) {
                 if (file_exists(public_path('/storage/orders/order-' . $order->id . '.pdf'))) {
                     // Mail::to($order->user->email)->send(new OrderShipped($order->id));
-                    
+
                     // add to queue 
                     // SendMailInvoice::dispatch($order);
                     dispatch(new SendMailInvoice($order));

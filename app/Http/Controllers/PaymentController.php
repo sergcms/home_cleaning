@@ -87,7 +87,6 @@ class PaymentController extends Controller
         // create pdf invoice 
         $pdf->createPDF($order);
 
-        
         // update event order
         UpdateOrderEvent::dispatch($order);
 

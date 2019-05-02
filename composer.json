@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/cashier": "^9.3",
         "laravel/framework": "5.8.*",
+        "laravel/horizon": "^3.1",
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1"
     },
