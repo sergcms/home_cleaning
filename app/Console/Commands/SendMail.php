@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Validator;
 use App\Models\Order;
 use App\Mail\OrderShipped;
 use App\Jobs\SendMailInvoice;
@@ -16,7 +17,7 @@ class SendMail extends Command
      *
      * @var string
      */
-    protected $signature = 'send:mail';
+    protected $signature = 'send:mail {date?}';
 
     /**
      * The console command description.
@@ -24,8 +25,6 @@ class SendMail extends Command
      * @var string
      */
     protected $description = 'Send mail to customer with attach pdf order';
-
-    protected $orders;
 
     /**
      * Create a new command instance.
@@ -36,9 +35,23 @@ class SendMail extends Command
     {
         parent::__construct();
 
-        // get all orders where paymant is paid
-        $this->orders = Order::where('payment', 'paid')->get();
     }
+        
+    /**
+     * get all orders where paymant is paid
+     */
+    public function getOrders($date = '') 
+    {
+        if ($date == '') {
+            $orders = Order::where('payment', 'paid')->get();
+        } else {
+            $orders = Order::where('payment', 'paid')
+                    ->where('date_payment', $date)
+                    ->get();
+        }
+
+        return $orders;
+    } 
 
     /**
      * Execute the console command.
@@ -47,15 +60,30 @@ class SendMail extends Command
      */
     public function handle()
     {
-        if ($this->orders != null) {
+        $this->info($this->description);
+        $date = $this->argument('date');
 
-            foreach ($this->orders as $key => $order) {
+        if ($date != '') {
+            $validator = Validator::make(['date'  => $date], ['date' => 'date']);
+
+            if ($validator->fails()) {
+                $messages = $validator->messages();
+
+                return $this->line($messages);
+            }
+            $orders = $this->getOrders($date);
+        } else {
+            $orders = $this->getOrders();
+        }
+
+        if ($orders->isNotEmpty()) {
+            foreach ($orders as $key => $order) {
+                $this->line('ok');
+
                 if (file_exists(public_path('/storage/orders/order-' . $order->id . '.pdf'))) {
-                    // Mail::to($order->user->email)->send(new OrderShipped($order->id));
-
                     // add to queue 
-                    // SendMailInvoice::dispatch($order);
-                    dispatch(new SendMailInvoice($order));
+                    SendMailInvoice::dispatch($order);
+                    // dispatch(new SendMailInvoice($order));
 
                     $this->line('Sent invoice №' . $order->id . ' on email ' . $order->user->email);
                 } else {
@@ -65,5 +93,7 @@ class SendMail extends Command
         } else {
             $this->line('No order for send!');
         }
+
+        return true;
     }
 }

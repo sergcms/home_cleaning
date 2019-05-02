@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Validator;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class CreateUser extends Command
@@ -37,14 +39,34 @@ class CreateUser extends Command
      */
     public function handle()
     {
+        $this->info($this->description);
+
         $email = $this->ask('Write your email: ');
+        $password = $this->ask('Write your password: ');
+        $password_confirmation = $this->ask('Write Confirmation your password: ');
 
-        // Validator::make()->validate();
+        $validator = Validator::make(
+            [
+                'email' => $email, 
+                'password' => 'password'
+            ], 
+            [
+                'email' => 'required|email|unique:users', 
+                'password' => 'required|confirmed|between:8,20'
+            ]
+        );
 
-        // $password = $this->ask('Write your password: ');
+        if ($validator->fails()) {
+            $messages = $validator->messages();
 
-        $this->line('Your email - ' . $email);
+            return $this->line($messages);
+        }
+        
+        // User::create([
+        //     'email'    => $email,
+        //     'password' => $password,
+        // ]);
 
-        return;
+        return TRUE;
     }
 }
