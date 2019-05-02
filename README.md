@@ -10,7 +10,6 @@
 
 5. For queues or jobs write command (php artisan queue:work) or (php artisan horizon)
 
-6. /dashboard - for see orders
+6. For create user of dashboard, write in console php artisan create:user
 
-
-
+7. /dashboard - for see orders
